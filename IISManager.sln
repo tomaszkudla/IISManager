@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IISManager", "IISManager\IISManager.csproj", "{FEFAA5BF-A8D8-4711-8F2B-2D897B638FC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IISManagerUnitTests", "IISManagerUnitTests\IISManagerUnitTests.csproj", "{828B78A9-DE53-48B0-B817-18AC1D2ED256}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FEFAA5BF-A8D8-4711-8F2B-2D897B638FC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEFAA5BF-A8D8-4711-8F2B-2D897B638FC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEFAA5BF-A8D8-4711-8F2B-2D897B638FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEFAA5BF-A8D8-4711-8F2B-2D897B638FC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{828B78A9-DE53-48B0-B817-18AC1D2ED256}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{828B78A9-DE53-48B0-B817-18AC1D2ED256}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{828B78A9-DE53-48B0-B817-18AC1D2ED256}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{828B78A9-DE53-48B0-B817-18AC1D2ED256}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {67ABC6BE-02D2-4E9B-8201-4FB848CE4FC5}
+	EndGlobalSection
+EndGlobal
