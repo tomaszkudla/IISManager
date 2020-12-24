@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace IISManager.Interfaces
 {
-    public interface IWorkerProcessesManager
+    public interface IApplicationPoolsManager
     {
-        List<WorkerProcess> GetWorkerProcesses();
+        List<ApplicationPool> GetApplicationPools();
     }
 }

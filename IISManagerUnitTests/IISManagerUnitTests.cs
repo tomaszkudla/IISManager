@@ -6,17 +6,17 @@ namespace IISManagerUnitTests
     [TestClass]
     public class IISManagerUnitTests
     {
-        private readonly WorkerProcessesManager manager;
+        private readonly ApplicationPoolsManager manager;
         public IISManagerUnitTests()
         {
-            manager = new WorkerProcessesManager();
+            manager = new ApplicationPoolsManager();
         }
 
         [TestMethod]
-        public void Should_GetWorkerProecesses()
+        public void Should_GetApplicationPools()
         {
-            var workerProcesses = manager.GetWorkerProcesses();
-            Assert.IsNotNull(workerProcesses);
+            var applicationPools = manager.GetApplicationPools();
+            Assert.IsNotNull(applicationPools);
         }
     }
 }

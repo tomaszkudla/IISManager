@@ -7,28 +7,14 @@ namespace IISManager.Implementations
 {
     public class WorkerProcess : IWorkerProcess
     {
+        private readonly Microsoft.Web.Administration.WorkerProcess workerProcess;
         public WorkerProcess(Microsoft.Web.Administration.WorkerProcess workerProcess)
         {
-            Name = workerProcess.AppPoolName;
-            Id = workerProcess.ProcessId;
+            this.workerProcess = workerProcess;
         }
 
-        public string Name { get; set; }
-        public int Id { get; set; }
-
-        public void Reset()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Start()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Stop()
-        {
-            throw new NotImplementedException();
-        }
+        public string Name { get => workerProcess.AppPoolName; }
+        public int Id { get => workerProcess.ProcessId; }
+        public WorkerProcessState State { get => (WorkerProcessState)(int)workerProcess.State; }
     }
 }

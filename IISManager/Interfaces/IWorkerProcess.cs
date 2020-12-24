@@ -1,8 +1,11 @@
-﻿namespace IISManager.Interfaces
+﻿using IISManager.Implementations;
+
+namespace IISManager.Interfaces
 {
-    public interface IWorkerProcess : IStoppable
+    public interface IWorkerProcess
     {
-        string Name { get; set; }
-        int Id { get; set; }
+        string Name { get; }
+        int Id { get; }
+        WorkerProcessState State { get; }
     }
 }
