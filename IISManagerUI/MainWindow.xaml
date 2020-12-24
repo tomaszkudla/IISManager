@@ -68,18 +68,14 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <!--<ListView Grid.Column="0" Grid.Row="1" ItemsSource="{Binding WorkerProcesses}">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}" />
-                                        <GridViewColumn Header="Id" Width="50" DisplayMemberBinding="{Binding Id}" />
-                                        <GridViewColumn Header="State" Width="50" DisplayMemberBinding="{Binding State}" />
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>-->
-                            <!--<Border BorderBrush="#E6E6E6" BorderThickness="1,1,0,1" Grid.Column="0" Grid.Row="1">
-                                <Label Content="{Binding WorkerProcesses}" HorizontalAlignment="Right"/>-->
-                            <!--</Border>-->
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Start" Click="Start_Click" />
+                                    <MenuItem Header="Stop" Click="Stop_Click"/>
+                                    <MenuItem Header="Recycle" Click="Recycle_Click" />
+                                    <MenuItem Header="Refresh" Click="Refresh_Click" />
+                                </ContextMenu>
+                            </Grid.ContextMenu>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
