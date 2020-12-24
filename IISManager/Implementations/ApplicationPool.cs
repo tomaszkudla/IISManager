@@ -8,6 +8,7 @@ namespace IISManager.Implementations
     {
         private readonly Microsoft.Web.Administration.ApplicationPool applicationPool;
         private readonly List<WorkerProcess> workerProcesses;
+
         public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool)
         {
             this.applicationPool = applicationPool;

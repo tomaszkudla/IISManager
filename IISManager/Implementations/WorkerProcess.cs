@@ -13,7 +13,6 @@ namespace IISManager.Implementations
             this.workerProcess = workerProcess;
         }
 
-        public string Name { get => workerProcess.AppPoolName; }
         public int Id { get => workerProcess.ProcessId; }
         public WorkerProcessState State { get => (WorkerProcessState)(int)workerProcess.State; }
     }

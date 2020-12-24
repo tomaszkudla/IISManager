@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IISManager", "IISManager\II
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IISManagerUnitTests", "IISManagerUnitTests\IISManagerUnitTests.csproj", "{828B78A9-DE53-48B0-B817-18AC1D2ED256}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IISManagerUI", "IISManagerUI\IISManagerUI.csproj", "{00F2B933-7EE4-4829-B659-559AC7021731}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{828B78A9-DE53-48B0-B817-18AC1D2ED256}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{828B78A9-DE53-48B0-B817-18AC1D2ED256}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{828B78A9-DE53-48B0-B817-18AC1D2ED256}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00F2B933-7EE4-4829-B659-559AC7021731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00F2B933-7EE4-4829-B659-559AC7021731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00F2B933-7EE4-4829-B659-559AC7021731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00F2B933-7EE4-4829-B659-559AC7021731}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
