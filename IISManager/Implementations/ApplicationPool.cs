@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace IISManager.Implementations
 {
-    public class ApplicationPool : IApplicationPool, INotifyPropertyChanged
+    public class ApplicationPool : IApplicationPool
     {
         private readonly WorkerProcessesCollection workerProcesses = new WorkerProcessesCollection();
         private Microsoft.Web.Administration.ApplicationPool applicationPool;
@@ -34,7 +34,7 @@ namespace IISManager.Implementations
             var workerProcessesList = GetWorkerProcesses();
             workerProcesses.Clear();
             workerProcessesList.ForEach(workerProcesses.Add);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WorkerProcesses"));
+            workerProcesses.Refresh();
         }
 
         public void Start()

@@ -26,7 +26,7 @@ namespace IISManager.Implementations
 
         public void Refresh()
         {
-            var applicationPoolsDict = serverManager.ApplicationPools.ToDictionary(p => p.Name, p => p);
+            var applicationPoolsDict = new ServerManager().ApplicationPools.ToDictionary(p => p.Name, p => p);
             foreach (var applicationPool in applicationPoolsDict)
             {
                 var currentAppPool = applicationPools.FirstOrDefault(p => p.Name == applicationPool.Value.Name);
@@ -36,7 +36,9 @@ namespace IISManager.Implementations
                 }
                 else
                 {
-                    currentAppPool.Refresh(applicationPool.Value);
+                    applicationPools.Remove(currentAppPool);
+
+                    applicationPools.Add(new ApplicationPool(applicationPool.Value));
                 }
             }
 
@@ -48,10 +50,8 @@ namespace IISManager.Implementations
                 }
             }
 
-            applicationPools.Add(new ApplicationPool(applicationPoolsDict.First().Value));
-
-            applicationPools.Clear();
-            serverManager.ApplicationPools.ToList().ForEach(p => applicationPools.Add(new ApplicationPool(p)));
+            //applicationPools.Clear();
+            //serverManager.ApplicationPools.ToList().ForEach(p => applicationPools.Add(new ApplicationPool(p)));
             //applicationPools.Clear();
             //GetApplicationPools().ForEach(applicationPools.Add);
             applicationPools.Refresh();
