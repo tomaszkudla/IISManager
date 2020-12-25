@@ -15,7 +15,7 @@ namespace IISManagerUnitTests
         [TestMethod]
         public void Should_GetApplicationPools()
         {
-            var applicationPools = manager.GetApplicationPools();
+            var applicationPools = manager.ApplicationPools;
             Assert.IsNotNull(applicationPools);
         }
     }

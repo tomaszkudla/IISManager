@@ -1,5 +1,5 @@
 ﻿using IISManager.Implementations;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace IISManager.Interfaces
 {
@@ -7,9 +7,10 @@ namespace IISManager.Interfaces
     {
         string Name { get; }
         ApplicationPoolState State { get; }
-        List<WorkerProcess> WorkerProcesses { get; }
+        WorkerProcessesCollection WorkerProcesses { get; }
         void Recycle();
         void Start();
         void Stop();
+        void Refresh(Microsoft.Web.Administration.ApplicationPool applicationPool);
     }
 }

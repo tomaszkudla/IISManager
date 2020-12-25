@@ -23,14 +23,12 @@ namespace IISManagerUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ApplicationPoolsManager manager;
-        private ObservableCollection<ApplicationPool> applicationPools;
+        private readonly ApplicationPoolsManager manager;
         public MainWindow()
         {
             InitializeComponent();
             manager = new ApplicationPoolsManager();
-            applicationPools = new ObservableCollection<ApplicationPool>(manager.GetApplicationPools());
-            applicationPoolsControl.ItemsSource = applicationPools;
+            applicationPoolsControl.ItemsSource = manager.ApplicationPools;
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
@@ -38,7 +36,7 @@ namespace IISManagerUI
             var menuItem = sender as MenuItem;
             var applicationPool = menuItem.DataContext as ApplicationPool;
             applicationPool.Start();
-            Refresh();
+            manager.Refresh();
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e)
@@ -46,7 +44,7 @@ namespace IISManagerUI
             var menuItem = sender as MenuItem;
             var applicationPool = menuItem.DataContext as ApplicationPool;
             applicationPool.Stop();
-            Refresh();
+            manager.Refresh();
         }
 
         private void Recycle_Click(object sender, RoutedEventArgs e)
@@ -54,19 +52,12 @@ namespace IISManagerUI
             var menuItem = sender as MenuItem;
             var applicationPool = menuItem.DataContext as ApplicationPool;
             applicationPool.Recycle();
-            Refresh();
+            manager.Refresh();
         }
 
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
-            Refresh();
-        }
-
-        private void Refresh()
-        {
-            applicationPools.Clear();
-            var appPools = manager.GetApplicationPools();
-            appPools.ForEach(applicationPools.Add);
+            manager.Refresh();
         }
     }
 }
