@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace IISManagerUI
 {
@@ -24,11 +25,26 @@ namespace IISManagerUI
     public partial class MainWindow : Window
     {
         private readonly ApplicationPoolsManager manager;
+        private readonly DispatcherTimer timer = new DispatcherTimer();
+
         public MainWindow()
         {
             InitializeComponent();
             manager = new ApplicationPoolsManager();
             applicationPoolsControl.ItemsSource = manager.ApplicationPools;
+            SetupTimer();
+        }
+
+        private void DispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            manager.Refresh();
+        }
+
+        private void SetupTimer()
+        {
+            timer.Tick += DispatcherTimer_Tick;
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Start();
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)

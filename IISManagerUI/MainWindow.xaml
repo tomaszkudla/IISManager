@@ -32,7 +32,7 @@
             <ItemsControl Name="applicationPoolsControl">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
+                        <Grid DataContext="{Binding}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
