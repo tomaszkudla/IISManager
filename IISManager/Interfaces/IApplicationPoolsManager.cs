@@ -7,5 +7,11 @@ namespace IISManager.Interfaces
     {
         ObservableCollection<ApplicationPool> ApplicationPools { get; }
         void Refresh();
+        void Select(string name);
+        void Unselect(string name);
+        void SelectAll();
+        void UnselectAll();
+        void StartSelected();
+        void StopSelected();
     }
 }

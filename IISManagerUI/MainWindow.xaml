@@ -15,24 +15,44 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <ScrollViewer Grid.Row="0" Grid.Column="0" VerticalScrollBarVisibility="Auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0" Background="#111111">
+            <Border BorderBrush="#E6E6E6" BorderThickness="1" Grid.Column="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="AUTO" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Grid.Column="0" Name="selectAllCheckBox" Click="SelectAllCheckBox_Click"/>
+                    <Button Grid.Column="1" Click="StartSelected_Click">Start Selected</Button>
+                    <Button Grid.Column="2" Click="StopSelected_Click">Stop Selected</Button>
+                </Grid>
+            </Border>
+        </StackPanel>
+        <ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Auto">
             <ItemsControl Name="applicationPoolsControl" BorderBrush="#E6E6E6" BorderThickness="1" >
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid DataContext="{Binding}">
+                        <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="AUTO" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Border BorderBrush="#E6E6E6" BorderThickness="1" >
-                                    <TextBox IsReadOnly="True" Text="{Binding Name, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="0"/>
-                                </Border>
-                                <TextBox IsReadOnly="True" Text="{Binding State, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="1"/>
+                                <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Tag="{Binding Name, Mode=OneWay}"/>
+                                <TextBox IsReadOnly="True" Text="{Binding Name, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="1"/>
+                                <TextBox IsReadOnly="True" Text="{Binding State, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="2"/>
                             </Grid>
                             <ItemsControl Grid.Row="1" ItemsSource="{Binding WorkerProcesses, Mode=OneWay}" BorderBrush="#E6E6E6" BorderThickness="1">
                                 <ItemsControl.ItemTemplate>

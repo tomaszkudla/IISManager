@@ -1,6 +1,5 @@
 ﻿using IISManager.Interfaces;
 using Microsoft.Web.Administration;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -8,12 +7,7 @@ namespace IISManager.Implementations
 {
     public class ApplicationPoolsManager : IApplicationPoolsManager
     {
-        private readonly ServerManager serverManager;
         private readonly ObservableCollection<ApplicationPool> applicationPools = new ObservableCollection<ApplicationPool>();
-        public ApplicationPoolsManager()
-        {
-            serverManager = new ServerManager();
-        }
 
         public ObservableCollection<ApplicationPool> ApplicationPools
         {
@@ -38,7 +32,10 @@ namespace IISManager.Implementations
                 else
                 {
                     applicationPools.Remove(currentAppPool);
-                    applicationPools.Add(new ApplicationPool(applicationPool.Value));
+                    applicationPools.Add(new ApplicationPool(applicationPool.Value)
+                    {
+                        IsSelected = currentAppPool.IsSelected
+                    });
                 }
             }
 
@@ -51,9 +48,50 @@ namespace IISManager.Implementations
             }
         }
 
-        private List<ApplicationPool> GetApplicationPools()
+        public void Select(string name)
         {
-            return serverManager.ApplicationPools.Select(p => new ApplicationPool(p)).ToList();
+            var appPool = applicationPools.FirstOrDefault(p => p.Name == name);
+            if (appPool != null)
+            {
+                appPool.IsSelected = true;
+            }
+        }
+
+        public void Unselect(string name)
+        {
+            var appPool = applicationPools.FirstOrDefault(p => p.Name == name);
+            if (appPool != null)
+            {
+                appPool.IsSelected = false;
+            }
+        }
+
+        public void SelectAll()
+        {
+            applicationPools.ToList().ForEach(p => p.IsSelected = true);
+        }
+
+        public void UnselectAll()
+        {
+            applicationPools.ToList().ForEach(p => p.IsSelected = false);
+        }
+
+        public void StartSelected()
+        {
+            var selected = applicationPools.Where(p => p.IsSelected);
+            foreach (var appPool in selected)
+            {
+                appPool.Start();
+            }
+        }
+
+        public void StopSelected()
+        {
+            var selected = applicationPools.Where(p => p.IsSelected);
+            foreach (var appPool in selected)
+            {
+                appPool.Stop();
+            }
         }
     }
 }

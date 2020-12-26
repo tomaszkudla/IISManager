@@ -77,5 +77,53 @@ namespace IISManagerUI
             var id = button.Tag.ToString();
             Clipboard.SetText(id);
         }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            var checkBox = sender as CheckBox;
+            var appPoolName = checkBox.Tag.ToString();
+            manager.Select(appPoolName);
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var checkBox = sender as CheckBox;
+            var appPoolName = checkBox.Tag.ToString();
+            manager.Unselect(appPoolName);
+            selectAllCheckBox.IsChecked = false;
+        }
+
+        private void AllCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            manager.SelectAll();
+        }
+
+        private void AllCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            manager.UnselectAll();
+        }
+
+        private void StartSelected_Click(object sender, RoutedEventArgs e)
+        {
+            manager.StartSelected();
+        }
+
+        private void StopSelected_Click(object sender, RoutedEventArgs e)
+        {
+            manager.StopSelected();
+        }
+
+        private void SelectAllCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            var checkBox = sender as CheckBox;
+            if (checkBox.IsChecked == true)
+            {
+                manager.SelectAll();
+            }
+            else
+            {
+                manager.UnselectAll();
+            }
+        }
     }
 }

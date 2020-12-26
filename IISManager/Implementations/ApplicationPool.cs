@@ -22,6 +22,8 @@ namespace IISManager.Implementations
 
         public ObservableCollection<WorkerProcess> WorkerProcesses => workerProcesses;
 
+        public bool IsSelected { get; set; }
+
         public void Recycle()
         {
             applicationPool.Recycle();
