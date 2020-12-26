@@ -7,14 +7,16 @@
         mc:Ignorable="d"
         Title="IIS Manager" Height="800" Width="800" Background="#1E1E1E">
     <Window.Resources>
-        <Style TargetType="Label">
+        <Style TargetType="TextBox">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="#E6E6E6" />
+            <Setter Property="Background" Value="#1E1E1E" />
+            <Setter Property="BorderThickness" Value="0" />
         </Style>
     </Window.Resources>
     <Grid>
         <ScrollViewer Grid.Row="0" Grid.Column="0" VerticalScrollBarVisibility="Auto">
-            <ItemsControl Name="applicationPoolsControl">
+            <ItemsControl Name="applicationPoolsControl" BorderBrush="#E6E6E6" BorderThickness="1" >
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid DataContext="{Binding}">
@@ -27,20 +29,24 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Label Content="{Binding Name}" HorizontalAlignment="Left" Grid.Column="0"/>
-                                <Label Content="{Binding State}" HorizontalAlignment="Left" Grid.Column="1"/>
+                                <Border BorderBrush="#E6E6E6" BorderThickness="1" >
+                                    <TextBox IsReadOnly="True" Text="{Binding Name, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="0"/>
+                                </Border>
+                                <TextBox IsReadOnly="True" Text="{Binding State, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="1"/>
                             </Grid>
-                            <ItemsControl Margin="0,5,0,5" Grid.Row="1" ItemsSource="{Binding WorkerProcesses}">
+                            <ItemsControl Grid.Row="1" ItemsSource="{Binding WorkerProcesses, Mode=OneWay}" BorderBrush="#E6E6E6" BorderThickness="1">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="10" />
-                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="AUTO" />
+                                                <ColumnDefinition Width="AUTO" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Label Content="{Binding Id}" HorizontalAlignment="Left" Grid.Column="1"/>
-                                            <Label Content="{Binding State}" HorizontalAlignment="Left" Grid.Column="2"/>
+                                            <TextBox IsReadOnly="True" Text="{Binding Id, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="1"/>
+                                            <Button Grid.Column="2" Click="CopyId_Click" Tag="{Binding Id, Mode=OneWay}">Copy</Button>
+                                            <TextBox IsReadOnly="True" Text="{Binding State, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="3"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

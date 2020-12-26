@@ -70,5 +70,12 @@ namespace IISManagerUI
             applicationPool.Recycle();
             manager.Refresh();
         }
+
+        private void CopyId_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var id = button.Tag.ToString();
+            Clipboard.SetText(id);
+        }
     }
 }
