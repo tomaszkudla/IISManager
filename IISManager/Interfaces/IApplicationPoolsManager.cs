@@ -13,5 +13,6 @@ namespace IISManager.Interfaces
         void UnselectAll();
         void StartSelected();
         void StopSelected();
+        void RecycleSelected();
     }
 }

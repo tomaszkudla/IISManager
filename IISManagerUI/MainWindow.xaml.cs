@@ -25,12 +25,14 @@ namespace IISManagerUI
     public partial class MainWindow : Window
     {
         private readonly ApplicationPoolsManager manager;
+        private readonly IISServerManager iisServerManager;
         private readonly DispatcherTimer timer = new DispatcherTimer();
 
         public MainWindow()
         {
             InitializeComponent();
             manager = new ApplicationPoolsManager();
+            iisServerManager = new IISServerManager();
             applicationPoolsControl.ItemsSource = manager.ApplicationPools;
             SetupTimer();
         }
@@ -111,6 +113,26 @@ namespace IISManagerUI
         private void StopSelected_Click(object sender, RoutedEventArgs e)
         {
             manager.StopSelected();
+        }
+
+        private void RecycleSelected_Click(object sender, RoutedEventArgs e)
+        {
+            manager.RecycleSelected();
+        }
+
+        private void StartIIS_Click(object sender, RoutedEventArgs e)
+        {
+            iisServerManager.Start();
+        }
+
+        private void StopIIS_Click(object sender, RoutedEventArgs e)
+        {
+            iisServerManager.Stop();
+        }
+
+        private void ResetIIS_Click(object sender, RoutedEventArgs e)
+        {
+            iisServerManager.Reset();
         }
 
         private void SelectAllCheckBox_Click(object sender, RoutedEventArgs e)

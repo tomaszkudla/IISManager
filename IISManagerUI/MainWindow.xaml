@@ -17,9 +17,25 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Background="#111111">
+            <Border BorderBrush="#E6E6E6" BorderThickness="1" Grid.Column="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1" Click="StartIIS_Click">Start IIS</Button>
+                    <Button Grid.Column="2" Click="StopIIS_Click">Stop IIS</Button>
+                    <Button Grid.Column="3" Click="ResetIIS_Click">Reset IIS</Button>
+                </Grid>
+            </Border>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="0" Background="#111111">
             <Border BorderBrush="#E6E6E6" BorderThickness="1" Grid.Column="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -32,10 +48,11 @@
                     <CheckBox Grid.Column="0" Name="selectAllCheckBox" Click="SelectAllCheckBox_Click"/>
                     <Button Grid.Column="1" Click="StartSelected_Click">Start Selected</Button>
                     <Button Grid.Column="2" Click="StopSelected_Click">Stop Selected</Button>
+                    <Button Grid.Column="3" Click="RecycleSelected_Click">Recycle Selected</Button>
                 </Grid>
             </Border>
         </StackPanel>
-        <ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto">
             <ItemsControl Name="applicationPoolsControl" BorderBrush="#E6E6E6" BorderThickness="1" >
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -59,13 +76,13 @@
                                     <DataTemplate>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="10" />
-                                                <ColumnDefinition Width="AUTO" />
-                                                <ColumnDefinition Width="AUTO" />
-                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="30" />
+                                                <ColumnDefinition Width="5*" />
+                                                <ColumnDefinition Width="5*" />
+                                                <ColumnDefinition Width="80*" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox IsReadOnly="True" Text="{Binding Id, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="1"/>
-                                            <Button Grid.Column="2" Click="CopyId_Click" Tag="{Binding Id, Mode=OneWay}">Copy</Button>
+                                            <TextBox IsReadOnly="True" HorizontalAlignment="Right" Text="{Binding Id, Mode=OneWay}" Grid.Column="1"/>
+                                            <Button Grid.Column="2" HorizontalAlignment="Left" Click="CopyId_Click" Tag="{Binding Id, Mode=OneWay}">Copy</Button>
                                             <TextBox IsReadOnly="True" Text="{Binding State, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="3"/>
                                         </Grid>
                                     </DataTemplate>

@@ -21,30 +21,36 @@ namespace IISManager.Implementations
         public void Refresh()
         {
             //TODO refactor
-            var applicationPoolsDict = new ServerManager().ApplicationPools.ToDictionary(p => p.Name, p => p);
-            foreach (var applicationPool in applicationPoolsDict)
+            try
             {
-                var currentAppPool = applicationPools.FirstOrDefault(p => p.Name == applicationPool.Value.Name);
-                if (currentAppPool == null)
+                var applicationPoolsDict = new ServerManager().ApplicationPools.ToDictionary(p => p.Name, p => p);
+                foreach (var applicationPool in applicationPoolsDict)
                 {
-                    applicationPools.Add(new ApplicationPool(applicationPool.Value));
-                }
-                else
-                {
-                    applicationPools.Remove(currentAppPool);
-                    applicationPools.Add(new ApplicationPool(applicationPool.Value)
+                    var currentAppPool = applicationPools.FirstOrDefault(p => p.Name == applicationPool.Value.Name);
+                    if (currentAppPool == null)
                     {
-                        IsSelected = currentAppPool.IsSelected
-                    });
+                        applicationPools.Add(new ApplicationPool(applicationPool.Value));
+                    }
+                    else
+                    {
+                        applicationPools.Remove(currentAppPool);
+                        applicationPools.Add(new ApplicationPool(applicationPool.Value)
+                        {
+                            IsSelected = currentAppPool.IsSelected
+                        });
+                    }
+                }
+
+                foreach (var applicationPool in applicationPools.ToList())
+                {
+                    if (!applicationPoolsDict.ContainsKey(applicationPool.Name))
+                    {
+                        applicationPools.Remove(applicationPools.FirstOrDefault(p => p.Name == applicationPool.Name));
+                    }
                 }
             }
-
-            foreach (var applicationPool in applicationPools.ToList())
+            catch (System.Exception)
             {
-                if (!applicationPoolsDict.ContainsKey(applicationPool.Name))
-                {
-                    applicationPools.Remove(applicationPools.FirstOrDefault(p => p.Name == applicationPool.Name));
-                }
             }
         }
 
@@ -91,6 +97,15 @@ namespace IISManager.Implementations
             foreach (var appPool in selected)
             {
                 appPool.Stop();
+            }
+        }
+
+        public void RecycleSelected()
+        {
+            var selected = applicationPools.Where(p => p.IsSelected);
+            foreach (var appPool in selected)
+            {
+                appPool.Recycle();
             }
         }
     }
