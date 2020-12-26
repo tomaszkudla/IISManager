@@ -5,19 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IISManagerUI"
         mc:Ignorable="d"
-        Title="IIS Manager" Height="800" Width="800" Background="#1E1E1E">
+        Title="IIS Manager" Height="800" Width="800" Background="#FF252526">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="#E6E6E6" />
-            <Setter Property="Background" Value="#1E1E1E" />
+            <Setter Property="Background" Value="#FC333333" />
             <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="#E6E6E6" />
+            <Setter Property="Background" Value="#FC333333" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
         </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Background="#111111">
@@ -36,10 +45,10 @@
             </Border>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="0" Background="#111111">
-            <Border BorderBrush="#E6E6E6" BorderThickness="1" Grid.Column="1">
+            <Border BorderBrush="#111111" BorderThickness="1" Grid.Column="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="AUTO" />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
@@ -53,37 +62,60 @@
             </Border>
         </StackPanel>
         <ScrollViewer Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto">
-            <ItemsControl Name="applicationPoolsControl" BorderBrush="#E6E6E6" BorderThickness="1" >
+            <ItemsControl Name="applicationPoolsControl" Background="#FC333333" >
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid>
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
+                            <Rectangle HorizontalAlignment="Stretch" Fill="#111111" Height="1"/>
+                            <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="AUTO" />
+                                    <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="5*" />
                                 </Grid.ColumnDefinitions>
                                 <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Tag="{Binding Name, Mode=OneWay}"/>
                                 <TextBox IsReadOnly="True" Text="{Binding Name, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="1"/>
                                 <TextBox IsReadOnly="True" Text="{Binding State, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="2"/>
                             </Grid>
-                            <ItemsControl Grid.Row="1" ItemsSource="{Binding WorkerProcesses, Mode=OneWay}" BorderBrush="#E6E6E6" BorderThickness="1">
+                            <ItemsControl Grid.Row="2" ItemsSource="{Binding WorkerProcesses, Mode=OneWay}" Background="#FF252526">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="30" />
-                                                <ColumnDefinition Width="5*" />
-                                                <ColumnDefinition Width="5*" />
-                                                <ColumnDefinition Width="80*" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBox IsReadOnly="True" HorizontalAlignment="Right" Text="{Binding Id, Mode=OneWay}" Grid.Column="1"/>
-                                            <Button Grid.Column="2" HorizontalAlignment="Left" Click="CopyId_Click" Tag="{Binding Id, Mode=OneWay}">Copy</Button>
-                                            <TextBox IsReadOnly="True" Text="{Binding State, Mode=OneWay}" HorizontalAlignment="Left" Grid.Column="3"/>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <Rectangle HorizontalAlignment="Stretch" Fill="#111111" Height="1"/>
+                                            <Grid Grid.Row="1">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="20" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="10*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Label Grid.Column="1" Content="▸" HorizontalAlignment="Right" Background="#FF252526"/>
+                                                <Label Grid.Column="2" HorizontalAlignment="Left" MouseDown="CopyId_Click" Tag="{Binding Id, Mode=OneWay}" Content="📋">
+                                                    <Label.Style>
+                                                        <Style TargetType="Label">
+                                                            <Setter Property="Foreground" Value="#E6E6E6" />
+                                                            <Setter Property="Padding" Value="0,0,2,0" />
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Foreground" Value="#FFBEE6FD" />
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Label.Style>
+                                                </Label>
+                                                <TextBox Grid.Column="3" IsReadOnly="True" Background="#FF252526" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding Id, Mode=OneWay}" />
+                                                <TextBox Grid.Column="4" IsReadOnly="True" Background="#FF252526" Text="{Binding State, Mode=OneWay}" HorizontalAlignment="Left" />
+                                            </Grid>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

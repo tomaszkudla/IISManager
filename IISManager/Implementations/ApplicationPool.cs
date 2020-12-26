@@ -1,4 +1,5 @@
 ﻿using IISManager.Interfaces;
+using Microsoft.Web.Administration;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -41,7 +42,12 @@ namespace IISManager.Implementations
 
         private List<WorkerProcess> GetWorkerProcesses()
         {
-            return applicationPool.WorkerProcesses.Select(p => new WorkerProcess(p)).ToList();
+            if (applicationPool.State == ObjectState.Started)
+            {
+                return applicationPool.WorkerProcesses.Select(p => new WorkerProcess(p)).ToList();
+            }
+
+            return new List<WorkerProcess>();
         }
     }
 }
