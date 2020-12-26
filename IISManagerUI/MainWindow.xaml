@@ -7,24 +7,9 @@
         mc:Ignorable="d"
         Title="IIS Manager" Height="800" Width="800" Background="#1E1E1E">
     <Window.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="Height" Value="36" />
-            <Setter Property="FontSize" Value="24" />
-            <Setter Property="Background" Value="#333333" />
-            <Setter Property="Foreground" Value="#E6E6E6" />
-        </Style>
         <Style TargetType="Label">
-            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="#E6E6E6" />
-            <Setter Property="Margin" Value="2" />
-        </Style>
-        <Style TargetType="RadioButton" x:Key="ColorByActive">
-            <Setter Property="Foreground" Value="#E6E6E6"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=IsActive}" Value="True">
-                    <Setter Property="Foreground" Value="#569DE5"/>
-                </DataTrigger>
-            </Style.Triggers>
         </Style>
     </Window.Resources>
     <Grid>
@@ -42,12 +27,8 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Border BorderBrush="#E6E6E6" BorderThickness="1" Grid.Column="0">
-                                    <Label Content="{Binding Name}" HorizontalAlignment="Left"/>
-                                </Border>
-                                <Border BorderBrush="#E6E6E6" BorderThickness="1" Grid.Column="1">
-                                    <Label Content="{Binding State}" HorizontalAlignment="Left"/>
-                                </Border>
+                                <Label Content="{Binding Name}" HorizontalAlignment="Left" Grid.Column="0"/>
+                                <Label Content="{Binding State}" HorizontalAlignment="Left" Grid.Column="1"/>
                             </Grid>
                             <ItemsControl Margin="0,5,0,5" Grid.Row="1" ItemsSource="{Binding WorkerProcesses}">
                                 <ItemsControl.ItemTemplate>
@@ -58,12 +39,8 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Border BorderBrush="#E6E6E6" BorderThickness="1" Grid.Column="1">
-                                                <Label Content="{Binding Id}" HorizontalAlignment="Left"/>
-                                            </Border>
-                                            <Border BorderBrush="#E6E6E6" BorderThickness="1" Grid.Column="2">
-                                                <Label Content="{Binding State}" HorizontalAlignment="Left"/>
-                                            </Border>
+                                            <Label Content="{Binding Id}" HorizontalAlignment="Left" Grid.Column="1"/>
+                                            <Label Content="{Binding State}" HorizontalAlignment="Left" Grid.Column="2"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -73,7 +50,6 @@
                                     <MenuItem Header="Start" Click="Start_Click" />
                                     <MenuItem Header="Stop" Click="Stop_Click"/>
                                     <MenuItem Header="Recycle" Click="Recycle_Click" />
-                                    <MenuItem Header="Refresh" Click="Refresh_Click" />
                                 </ContextMenu>
                             </Grid.ContextMenu>
                         </Grid>

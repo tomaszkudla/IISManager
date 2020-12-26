@@ -70,10 +70,5 @@ namespace IISManagerUI
             applicationPool.Recycle();
             manager.Refresh();
         }
-
-        private void Refresh_Click(object sender, RoutedEventArgs e)
-        {
-            manager.Refresh();
-        }
     }
 }
