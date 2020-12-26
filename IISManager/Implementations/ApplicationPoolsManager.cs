@@ -9,13 +9,13 @@ namespace IISManager.Implementations
     public class ApplicationPoolsManager : IApplicationPoolsManager
     {
         private readonly ServerManager serverManager;
-        private readonly ApplicationPoolsCollection applicationPools = new ApplicationPoolsCollection();
+        private readonly ObservableCollection<ApplicationPool> applicationPools = new ObservableCollection<ApplicationPool>();
         public ApplicationPoolsManager()
         {
             serverManager = new ServerManager();
         }
 
-        public ApplicationPoolsCollection ApplicationPools
+        public ObservableCollection<ApplicationPool> ApplicationPools
         {
             get
             {
@@ -26,6 +26,7 @@ namespace IISManager.Implementations
 
         public void Refresh()
         {
+            //TODO refactor
             var applicationPoolsDict = new ServerManager().ApplicationPools.ToDictionary(p => p.Name, p => p);
             foreach (var applicationPool in applicationPoolsDict)
             {
@@ -37,7 +38,6 @@ namespace IISManager.Implementations
                 else
                 {
                     applicationPools.Remove(currentAppPool);
-
                     applicationPools.Add(new ApplicationPool(applicationPool.Value));
                 }
             }
@@ -49,12 +49,6 @@ namespace IISManager.Implementations
                     applicationPools.Remove(applicationPools.FirstOrDefault(p => p.Name == applicationPool.Name));
                 }
             }
-
-            //applicationPools.Clear();
-            //serverManager.ApplicationPools.ToList().ForEach(p => applicationPools.Add(new ApplicationPool(p)));
-            //applicationPools.Clear();
-            //GetApplicationPools().ForEach(applicationPools.Add);
-            applicationPools.Refresh();
         }
 
         private List<ApplicationPool> GetApplicationPools()

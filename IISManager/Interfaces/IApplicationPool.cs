@@ -7,10 +7,9 @@ namespace IISManager.Interfaces
     {
         string Name { get; }
         ApplicationPoolState State { get; }
-        WorkerProcessesCollection WorkerProcesses { get; }
+        ObservableCollection<WorkerProcess> WorkerProcesses { get; }
         void Recycle();
         void Start();
         void Stop();
-        void Refresh(Microsoft.Web.Administration.ApplicationPool applicationPool);
     }
 }

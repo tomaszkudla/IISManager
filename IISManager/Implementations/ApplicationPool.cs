@@ -1,40 +1,30 @@
 ﻿using IISManager.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 
 namespace IISManager.Implementations
 {
     public class ApplicationPool : IApplicationPool
     {
-        private readonly WorkerProcessesCollection workerProcesses = new WorkerProcessesCollection();
-        private Microsoft.Web.Administration.ApplicationPool applicationPool;
+        private readonly ObservableCollection<WorkerProcess> workerProcesses = new ObservableCollection<WorkerProcess>();
+        private readonly Microsoft.Web.Administration.ApplicationPool applicationPool;
 
         public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool)
         {
-            Refresh(applicationPool);
+            this.applicationPool = applicationPool;
+            var workerProcessesList = GetWorkerProcesses();
+            workerProcessesList.ForEach(workerProcesses.Add);
         }
 
         public string Name { get => applicationPool.Name; }
         public ApplicationPoolState State { get => (ApplicationPoolState)(int)applicationPool.State; }
 
-        public WorkerProcessesCollection WorkerProcesses => workerProcesses;
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        public ObservableCollection<WorkerProcess> WorkerProcesses => workerProcesses;
 
         public void Recycle()
         {
             applicationPool.Recycle();
-        }
-
-        public void Refresh(Microsoft.Web.Administration.ApplicationPool applicationPool)
-        {
-            this.applicationPool = applicationPool;
-            var workerProcessesList = GetWorkerProcesses();
-            workerProcesses.Clear();
-            workerProcessesList.ForEach(workerProcesses.Add);
-            workerProcesses.Refresh();
         }
 
         public void Start()

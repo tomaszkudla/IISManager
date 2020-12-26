@@ -1,10 +1,11 @@
 ﻿using IISManager.Implementations;
+using System.Collections.ObjectModel;
 
 namespace IISManager.Interfaces
 {
     public interface IApplicationPoolsManager
     {
-        ApplicationPoolsCollection ApplicationPools { get; }
+        ObservableCollection<ApplicationPool> ApplicationPools { get; }
         void Refresh();
     }
 }
