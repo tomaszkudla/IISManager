@@ -4,10 +4,10 @@ using IISManager.Implementations;
 namespace IISManagerUnitTests
 {
     [TestClass]
-    public class IISManagerUnitTests
+    public class ApplicationPoolsManagerUnitTests
     {
         private readonly ApplicationPoolsManager manager;
-        public IISManagerUnitTests()
+        public ApplicationPoolsManagerUnitTests()
         {
             manager = ApplicationPoolsManager.Instance;
         }

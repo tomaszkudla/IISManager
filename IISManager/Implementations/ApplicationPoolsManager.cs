@@ -67,10 +67,16 @@ namespace IISManager.Implementations
             //}
 
             var selectedAppPools = new HashSet<string>(applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name));
-            applicationPools.Value = new ServerManager().ApplicationPools.Select(p => new ApplicationPool(p)
+            var newValue = new ServerManager().ApplicationPools.Select(p => new ApplicationPool(p)
             {
                 IsSelected = selectedAppPools.Contains(p.Name)
             }).ToList();
+            var oldValue = applicationPools.Value;
+
+            //if (!Enumerable.SequenceEqual(newValue, oldValue))
+            //{
+                applicationPools.Value = newValue;
+            //}
         }
 
         public void Select(string name)
