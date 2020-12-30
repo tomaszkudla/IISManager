@@ -40,17 +40,11 @@ namespace IISManager.Implementations
         public void Refresh()
         {
             var selectedAppPools = new HashSet<string>(applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name));
-            var newValue = new ServerManager().ApplicationPools.Select(p => new ApplicationPool(p)
+            applicationPools.Value = new ServerManager().ApplicationPools.Select(p => new ApplicationPool(p)
             {
                 IsSelected = selectedAppPools.Contains(p.Name)
             }).ToList();
-            var oldValue = applicationPools.Value;
 
-            //TODO
-            //if (!Enumerable.SequenceEqual(newValue, oldValue))
-            //{
-                applicationPools.Value = newValue;
-            //}
         }
 
         public void Select(string name)
@@ -74,12 +68,16 @@ namespace IISManager.Implementations
 
         public void SelectAll()
         {
-            applicationPools.Value.ToList().ForEach(p => p.IsSelected = true);
+            var appPools = applicationPools.Value.ConvertAll(p => p.Clone());
+            appPools.ForEach(p => p.IsSelected = true);
+            applicationPools.Value = appPools;
         }
 
         public void UnselectAll()
         {
-            applicationPools.Value.ToList().ForEach(p => p.IsSelected = false);
+            var appPools = applicationPools.Value.ConvertAll(p => p.Clone());
+            appPools.ForEach(p => p.IsSelected = false);
+            applicationPools.Value = appPools;
         }
 
         public void StartSelected()

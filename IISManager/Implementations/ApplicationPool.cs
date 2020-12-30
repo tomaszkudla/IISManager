@@ -10,16 +10,19 @@ namespace IISManager.Implementations
     {
         private readonly ObservableList<WorkerProcess> workerProcesses = new ObservableList<WorkerProcess>();
         private readonly Microsoft.Web.Administration.ApplicationPool applicationPool;
+        private readonly string name;
+        private readonly ApplicationPoolState state;
 
         public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool)
         {
             this.applicationPool = applicationPool;
-            var workerProcessesList = GetWorkerProcesses();
-            workerProcessesList.ForEach(workerProcesses.Value.Add);
+            name = applicationPool.Name;
+            state = (ApplicationPoolState)(int)applicationPool.State;
+            workerProcesses.Value = GetWorkerProcesses(applicationPool);
         }
 
-        public string Name { get => applicationPool.Name; }
-        public ApplicationPoolState State { get => (ApplicationPoolState)(int)applicationPool.State; }
+        public string Name { get => name; }
+        public ApplicationPoolState State { get => state; }
 
         public ObservableList<WorkerProcess> WorkerProcesses => workerProcesses;
 
@@ -29,6 +32,7 @@ namespace IISManager.Implementations
         {
             return this.Name == other.Name &&
                 this.State == other.State &&
+                this.IsSelected == other.IsSelected &&
                 Enumerable.SequenceEqual(this.WorkerProcesses.Value, other.WorkerProcesses.Value);
         }
 
@@ -56,9 +60,17 @@ namespace IISManager.Implementations
             }
         }
 
-        private List<WorkerProcess> GetWorkerProcesses()
+        public ApplicationPool Clone()
         {
-            if (applicationPool.State == ObjectState.Started)
+            return new ApplicationPool(applicationPool)
+            {
+                IsSelected = this.IsSelected
+            };
+        }
+
+        private List<WorkerProcess> GetWorkerProcesses(Microsoft.Web.Administration.ApplicationPool applicationPool)
+        {
+            if (applicationPool.State != ObjectState.Stopped)
             {
                 return applicationPool.WorkerProcesses.Select(p => new WorkerProcess(p)).ToList();
             }

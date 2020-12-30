@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace IISManager.Implementations
 {
-	public class ObservableList<T> : INotifyPropertyChanged, IEnumerable
+	public class ObservableList<T> : INotifyPropertyChanged
 	{
 		private List<T> value;
 
@@ -23,8 +23,11 @@ namespace IISManager.Implementations
 			get { return value; }
 			set
 			{
-				this.value = value;
-				PropertyChanged(this, new PropertyChangedEventArgs("Value"));
+				if (!Enumerable.SequenceEqual(this.value, value))
+				{
+					this.value = value;
+					PropertyChanged(this, new PropertyChangedEventArgs("Value"));
+				}
 			}
 		}
 
@@ -34,10 +37,5 @@ namespace IISManager.Implementations
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
-        public IEnumerator GetEnumerator()
-        {
-			return value.GetEnumerator();
-        }
     }
 }
