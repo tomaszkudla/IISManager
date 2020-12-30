@@ -27,17 +27,26 @@ namespace IISManager.Implementations
 
         public void Recycle()
         {
-            applicationPool.Recycle();
+            if (applicationPool.State != ObjectState.Stopped)
+            {
+                applicationPool.Recycle();
+            }
         }
 
         public void Start()
         {
-            applicationPool.Start();
+            if (applicationPool.State != ObjectState.Started)
+            {
+                applicationPool.Start();
+            }
         }
 
         public void Stop()
         {
-            applicationPool.Stop();
+            if (applicationPool.State != ObjectState.Stopped)
+            {
+                applicationPool.Stop();
+            }
         }
 
         private List<WorkerProcess> GetWorkerProcesses()
