@@ -6,22 +6,6 @@
         xmlns:local="clr-namespace:IISManagerUI"
         mc:Ignorable="d"
         Title="IIS Manager" Height="800" Width="800" Background="#FF252526">
-    <Window.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="FontSize" Value="12" />
-            <Setter Property="Foreground" Value="#E6E6E6" />
-            <Setter Property="Background" Value="#FC333333" />
-            <Setter Property="BorderThickness" Value="0" />
-        </Style>
-        <Style TargetType="Label">
-            <Setter Property="FontSize" Value="12" />
-            <Setter Property="Foreground" Value="#E6E6E6" />
-            <Setter Property="Background" Value="#FC333333" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Margin" Value="0" />
-            <Setter Property="Padding" Value="0" />
-        </Style>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

@@ -27,21 +27,7 @@ namespace IISManagerUI
             InitializeComponent();
             manager = ApplicationPoolsManager.Instance;
             iisServerManager = IISServerManager.Instance;
-            //selectAllCheckBox.SetBinding(CheckBox.IsCheckedProperty, new Binding("test")
-            //{
-            //    Source = manager.AllSelected
-            //});
             selectAllCheckBox.DataContext = manager.AllSelected;
-            //var xBinding = new Binding();
-            //a real instance of the object where the source property is defined
-            //it have to be the same instance which is defined in DataModel.DetailList
-            //xBinding.Source = manager.AllSelected;
-            //xBinding.Path = new PropertyPath("Value");
-            //xBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-            //xBinding.Mode = BindingMode.OneWay;
-            //Use this instead the .SetBinding( , ) where the checkbox is the object to binded to
-            //BindingOperations.SetBinding(selectAllCheckBox, CheckBox.ContentProperty, xBinding);
-            //selectAllCheckBox.SetBinding(CheckBox.ContentProperty, xBinding);
         }
 
         private void StartSelected_Click(object sender, RoutedEventArgs e)

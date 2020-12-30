@@ -39,33 +39,6 @@ namespace IISManager.Implementations
 
         public void Refresh()
         {
-            //TODO refactor
-            //var applicationPoolsDict = new ServerManager().ApplicationPools.ToDictionary(p => p.Name, p => p);
-            //foreach (var applicationPool in applicationPoolsDict)
-            //{
-            //    var currentAppPool = applicationPools.Value.FirstOrDefault(p => p.Name == applicationPool.Value.Name);
-            //    if (currentAppPool == null)
-            //    {
-            //        applicationPools.Value.Add(new ApplicationPool(applicationPool.Value));
-            //    }
-            //    else
-            //    {
-            //        applicationPools.Value.Remove(currentAppPool);
-            //        applicationPools.Value.Add(new ApplicationPool(applicationPool.Value)
-            //        {
-            //            IsSelected = currentAppPool.IsSelected
-            //        });
-            //    }
-            //}
-
-            //foreach (var applicationPool in applicationPools.Value.ToList())
-            //{
-            //    if (!applicationPoolsDict.ContainsKey(applicationPool.Name))
-            //    {
-            //        applicationPools.Value.Remove(applicationPools.Value.FirstOrDefault(p => p.Name == applicationPool.Name));
-            //    }
-            //}
-
             var selectedAppPools = new HashSet<string>(applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name));
             var newValue = new ServerManager().ApplicationPools.Select(p => new ApplicationPool(p)
             {
@@ -73,6 +46,7 @@ namespace IISManager.Implementations
             }).ToList();
             var oldValue = applicationPools.Value;
 
+            //TODO
             //if (!Enumerable.SequenceEqual(newValue, oldValue))
             //{
                 applicationPools.Value = newValue;
