@@ -1,14 +1,27 @@
-﻿using Microsoft.Web.Administration;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 
 namespace IISManager.Implementations
 {
-    public class IISServerManager
+    public sealed class IISServerManager
     {
+        private static readonly IISServerManager instance = new IISServerManager();
+
+        static IISServerManager()
+        {
+        }
+
+        private IISServerManager()
+        {
+        }
+
+        public static IISServerManager Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
         public void Start()
         {
             GetIISResetProcess("/start").Start();

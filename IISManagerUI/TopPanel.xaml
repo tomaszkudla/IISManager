@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="IISManagerUI.TopPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IISManagerUI"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="800" Background="#111111">
+    <UserControl.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Foreground" Value="#E6E6E6" />
+            <Setter Property="Background" Value="#111111" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}" x:Key="GreenHover">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="Green" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}" x:Key="RedHover">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="Red" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <CheckBox Grid.Column="0" Name="selectAllCheckBox" Click="SelectAllCheckBox_Click" VerticalAlignment="Center" Padding="2" Margin="2,4,0,0" IsChecked="{Binding Value, Mode=TwoWay}"/>
+        <Label Grid.Column="1" MouseDown="StartSelected_Click" ToolTip="Start selected" Content="▶️" Style="{StaticResource GreenHover}" />
+        <Label Grid.Column="2" MouseDown="StopSelected_Click" ToolTip="Stop selected" Content="■" Style="{StaticResource RedHover}" />
+        <Label Grid.Column="3" MouseDown="RecycleSelected_Click" ToolTip="Recycle selected" Content="🔄" Style="{StaticResource GreenHover}" />
+        <Label Grid.Column="5" Content="IIS" />
+        <Label Grid.Column="6" MouseDown="StartIIS_Click" ToolTip="Start IIS" Content="▶️" Style="{StaticResource GreenHover}" />
+        <Label Grid.Column="7" MouseDown="StopIIS_Click" ToolTip="Stop IIS" Content="■" Style="{StaticResource RedHover}" />
+        <Label Grid.Column="8" HorizontalAlignment="Left" FontSize="20" MouseDown="ResetIIS_Click" ToolTip="Reset IIS" Content="🔄" Style="{StaticResource GreenHover}" />
+    </Grid>
+</UserControl>

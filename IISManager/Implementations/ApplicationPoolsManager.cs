@@ -5,9 +5,26 @@ using System.Linq;
 
 namespace IISManager.Implementations
 {
-    public class ApplicationPoolsManager : IApplicationPoolsManager
+    public sealed class ApplicationPoolsManager : IApplicationPoolsManager
     {
+        private static readonly ApplicationPoolsManager instance = new ApplicationPoolsManager();
         private readonly ObservableCollection<ApplicationPool> applicationPools = new ObservableCollection<ApplicationPool>();
+
+        static ApplicationPoolsManager()
+        {
+        }
+
+        private ApplicationPoolsManager()
+        {
+        }
+
+        public static ApplicationPoolsManager Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
 
         public ObservableCollection<ApplicationPool> ApplicationPools
         {
@@ -17,6 +34,8 @@ namespace IISManager.Implementations
                 return applicationPools;
             }
         }
+
+        public Observable<bool> AllSelected { get; } = new Observable<bool>();
 
         public void Refresh()
         {
@@ -63,6 +82,7 @@ namespace IISManager.Implementations
             if (appPool != null)
             {
                 appPool.IsSelected = false;
+                AllSelected.Value = false;
             }
         }
 

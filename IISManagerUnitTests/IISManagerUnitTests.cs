@@ -9,7 +9,7 @@ namespace IISManagerUnitTests
         private readonly ApplicationPoolsManager manager;
         public IISManagerUnitTests()
         {
-            manager = new ApplicationPoolsManager();
+            manager = ApplicationPoolsManager.Instance;
         }
 
         [TestMethod]
