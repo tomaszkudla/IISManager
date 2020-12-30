@@ -1,11 +1,12 @@
 ﻿using IISManager.Implementations;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace IISManager.Interfaces
 {
     public interface IApplicationPoolsManager
     {
-        ObservableCollection<ApplicationPool> ApplicationPools { get; }
+        ObservableList<ApplicationPool> ApplicationPools { get; }
         Observable<bool> AllSelected { get; }
         void Refresh();
         void Select(string name);

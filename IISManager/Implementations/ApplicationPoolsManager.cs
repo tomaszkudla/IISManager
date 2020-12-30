@@ -1,6 +1,6 @@
 ﻿using IISManager.Interfaces;
 using Microsoft.Web.Administration;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace IISManager.Implementations
@@ -8,7 +8,7 @@ namespace IISManager.Implementations
     public sealed class ApplicationPoolsManager : IApplicationPoolsManager
     {
         private static readonly ApplicationPoolsManager instance = new ApplicationPoolsManager();
-        private readonly ObservableCollection<ApplicationPool> applicationPools = new ObservableCollection<ApplicationPool>();
+        private readonly ObservableList<ApplicationPool> applicationPools = new ObservableList<ApplicationPool>();
 
         static ApplicationPoolsManager()
         {
@@ -26,7 +26,7 @@ namespace IISManager.Implementations
             }
         }
 
-        public ObservableCollection<ApplicationPool> ApplicationPools
+        public ObservableList<ApplicationPool> ApplicationPools
         {
             get
             {
@@ -40,36 +40,42 @@ namespace IISManager.Implementations
         public void Refresh()
         {
             //TODO refactor
-            var applicationPoolsDict = new ServerManager().ApplicationPools.ToDictionary(p => p.Name, p => p);
-            foreach (var applicationPool in applicationPoolsDict)
-            {
-                var currentAppPool = applicationPools.FirstOrDefault(p => p.Name == applicationPool.Value.Name);
-                if (currentAppPool == null)
-                {
-                    applicationPools.Add(new ApplicationPool(applicationPool.Value));
-                }
-                else
-                {
-                    applicationPools.Remove(currentAppPool);
-                    applicationPools.Add(new ApplicationPool(applicationPool.Value)
-                    {
-                        IsSelected = currentAppPool.IsSelected
-                    });
-                }
-            }
+            //var applicationPoolsDict = new ServerManager().ApplicationPools.ToDictionary(p => p.Name, p => p);
+            //foreach (var applicationPool in applicationPoolsDict)
+            //{
+            //    var currentAppPool = applicationPools.Value.FirstOrDefault(p => p.Name == applicationPool.Value.Name);
+            //    if (currentAppPool == null)
+            //    {
+            //        applicationPools.Value.Add(new ApplicationPool(applicationPool.Value));
+            //    }
+            //    else
+            //    {
+            //        applicationPools.Value.Remove(currentAppPool);
+            //        applicationPools.Value.Add(new ApplicationPool(applicationPool.Value)
+            //        {
+            //            IsSelected = currentAppPool.IsSelected
+            //        });
+            //    }
+            //}
 
-            foreach (var applicationPool in applicationPools.ToList())
+            //foreach (var applicationPool in applicationPools.Value.ToList())
+            //{
+            //    if (!applicationPoolsDict.ContainsKey(applicationPool.Name))
+            //    {
+            //        applicationPools.Value.Remove(applicationPools.Value.FirstOrDefault(p => p.Name == applicationPool.Name));
+            //    }
+            //}
+
+            var selectedAppPools = new HashSet<string>(applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name));
+            applicationPools.Value = new ServerManager().ApplicationPools.Select(p => new ApplicationPool(p)
             {
-                if (!applicationPoolsDict.ContainsKey(applicationPool.Name))
-                {
-                    applicationPools.Remove(applicationPools.FirstOrDefault(p => p.Name == applicationPool.Name));
-                }
-            }
+                IsSelected = selectedAppPools.Contains(p.Name)
+            }).ToList();
         }
 
         public void Select(string name)
         {
-            var appPool = applicationPools.FirstOrDefault(p => p.Name == name);
+            var appPool = applicationPools.Value.FirstOrDefault(p => p.Name == name);
             if (appPool != null)
             {
                 appPool.IsSelected = true;
@@ -78,7 +84,7 @@ namespace IISManager.Implementations
 
         public void Unselect(string name)
         {
-            var appPool = applicationPools.FirstOrDefault(p => p.Name == name);
+            var appPool = applicationPools.Value.FirstOrDefault(p => p.Name == name);
             if (appPool != null)
             {
                 appPool.IsSelected = false;
@@ -88,17 +94,17 @@ namespace IISManager.Implementations
 
         public void SelectAll()
         {
-            applicationPools.ToList().ForEach(p => p.IsSelected = true);
+            applicationPools.Value.ToList().ForEach(p => p.IsSelected = true);
         }
 
         public void UnselectAll()
         {
-            applicationPools.ToList().ForEach(p => p.IsSelected = false);
+            applicationPools.Value.ToList().ForEach(p => p.IsSelected = false);
         }
 
         public void StartSelected()
         {
-            var selected = applicationPools.Where(p => p.IsSelected);
+            var selected = applicationPools.Value.Where(p => p.IsSelected);
             foreach (var appPool in selected)
             {
                 appPool.Start();
@@ -107,7 +113,7 @@ namespace IISManager.Implementations
 
         public void StopSelected()
         {
-            var selected = applicationPools.Where(p => p.IsSelected);
+            var selected = applicationPools.Value.Where(p => p.IsSelected);
             foreach (var appPool in selected)
             {
                 appPool.Stop();
@@ -116,7 +122,7 @@ namespace IISManager.Implementations
 
         public void RecycleSelected()
         {
-            var selected = applicationPools.Where(p => p.IsSelected);
+            var selected = applicationPools.Value.Where(p => p.IsSelected);
             foreach (var appPool in selected)
             {
                 appPool.Recycle();

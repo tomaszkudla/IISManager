@@ -27,7 +27,7 @@ namespace IISManagerUI
         {
             InitializeComponent();
             manager = ApplicationPoolsManager.Instance;
-            applicationPoolsControl.ItemsSource = manager.ApplicationPools;
+            applicationPoolsControl.DataContext = manager.ApplicationPools;
             SetupTimer();
         }
 

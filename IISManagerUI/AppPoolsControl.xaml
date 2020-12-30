@@ -43,7 +43,7 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <ItemsControl Name="applicationPoolsControl" Background="#FC333333" >
+    <ItemsControl Name="applicationPoolsControl" Background="#FC333333" ItemsSource="{Binding Value, Mode=OneWay}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <Grid DataContext="{Binding}">
@@ -63,7 +63,7 @@
                         <TextBox Grid.Column="1" Text="{Binding Name, Mode=OneWay}" />
                         <TextBox Grid.Column="2" Text="{Binding State, Mode=OneWay}" />
                     </Grid>
-                    <ItemsControl Grid.Row="2" ItemsSource="{Binding WorkerProcesses, Mode=OneWay}" Background="#FF252526">
+                    <ItemsControl Grid.Row="2" ItemsSource="{Binding WorkerProcesses.Value, Mode=OneWay}" Background="#FF252526">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
