@@ -25,8 +25,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Background="#111111">
             <Border BorderBrush="#111111" BorderThickness="1" Grid.Column="1">
