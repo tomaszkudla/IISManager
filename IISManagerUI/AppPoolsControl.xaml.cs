@@ -21,29 +21,23 @@ namespace IISManagerUI
     public partial class AppPoolsControl : UserControl
     {
         private readonly ApplicationPoolsManager manager;
-        private readonly DispatcherTimer timer = new DispatcherTimer();
+        private readonly RefreshingTimer timer; 
 
         public AppPoolsControl()
         {
             InitializeComponent();
             manager = ApplicationPoolsManager.Instance;
+            timer = RefreshingTimer.Instance;
+            timer.Tick += Timer_Tick;
             applicationPoolsControl.DataContext = manager.ApplicationPools;
-            SetupTimer();
         }
 
-        private void DispatcherTimer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
             Utils.SafeExecute(() =>
             {
                 manager.Refresh();
             });
-        }
-
-        private void SetupTimer()
-        {
-            timer.Tick += DispatcherTimer_Tick;
-            timer.Interval = new TimeSpan(0, 0, 1);
-            timer.Start();
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
