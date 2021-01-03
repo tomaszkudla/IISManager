@@ -47,10 +47,10 @@
         <CheckBox Grid.Column="0" Name="selectAllCheckBox" Click="SelectAllCheckBox_Click" VerticalAlignment="Center" Padding="2" Margin="2,4,0,0" IsChecked="{Binding Value, Mode=TwoWay}"/>
         <Label Grid.Column="1" MouseDown="StartSelected_Click" ToolTip="Start selected" Content="▶️" Style="{StaticResource GreenHover}" />
         <Label Grid.Column="2" MouseDown="StopSelected_Click" ToolTip="Stop selected" Content="■" Style="{StaticResource RedHover}" />
-        <Label Grid.Column="3" MouseDown="RecycleSelected_Click" ToolTip="Recycle selected" Content="🔄" Style="{StaticResource GreenHover}" />
+        <Label Grid.Column="3" MouseDown="RecycleSelected_Click" ToolTip="Recycle selected" Content="⭮" Style="{StaticResource GreenHover}" />
         <Label Grid.Column="5" Content="IIS" />
         <Label Grid.Column="6" MouseDown="StartIIS_Click" ToolTip="Start IIS" Content="▶️" Style="{StaticResource GreenHover}" />
         <Label Grid.Column="7" MouseDown="StopIIS_Click" ToolTip="Stop IIS" Content="■" Style="{StaticResource RedHover}" />
-        <Label Grid.Column="8" HorizontalAlignment="Left" FontSize="20" MouseDown="ResetIIS_Click" ToolTip="Reset IIS" Content="🔄" Style="{StaticResource GreenHover}" />
+        <Label Grid.Column="8" HorizontalAlignment="Left" FontSize="20" MouseDown="ResetIIS_Click" ToolTip="Reset IIS" Content="⭮" Style="{StaticResource GreenHover}" />
     </Grid>
 </UserControl>

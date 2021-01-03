@@ -81,7 +81,7 @@
                                             <ColumnDefinition Width="10*" />
                                         </Grid.ColumnDefinitions>
                                         <Label Grid.Column="1" Content="▸" Style="{StaticResource DarkLabel}"/>
-                                        <Label Grid.Column="2" MouseDown="CopyId_Click" Tag="{Binding Id, Mode=OneWay}" Content="📋" Style="{StaticResource BlueHover}" />
+                                        <Label Grid.Column="2" MouseDown="CopyId_Click" Tag="{Binding Id, Mode=OneWay}" Content="⧉" Style="{StaticResource BlueHover}" />
                                         <TextBox Grid.Column="3" Text="{Binding Id, Mode=OneWay}" Style="{StaticResource DarkTextBox}"/>
                                         <TextBox Grid.Column="4" Text="{Binding State, Mode=OneWay}" Style="{StaticResource DarkTextBox}"/>
                                     </Grid>
