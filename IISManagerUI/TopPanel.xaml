@@ -19,7 +19,7 @@
         <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}" x:Key="GreenHover">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="Green" />
+                    <Setter Property="Foreground" Value="Lime" />
                 </Trigger>
             </Style.Triggers>
         </Style>
