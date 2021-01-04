@@ -40,11 +40,13 @@ namespace IISManager.Implementations
         public void Refresh()
         {
             var selectedAppPools = new HashSet<string>(applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name));
-            applicationPools.Value = new ServerManager().ApplicationPools.Select(p => new ApplicationPool(p)
+            using (var serverManager = new ServerManager())
             {
-                IsSelected = selectedAppPools.Contains(p.Name)
-            }).ToList();
-
+                applicationPools.Value = serverManager.ApplicationPools.Select(p => new ApplicationPool(p)
+                {
+                    IsSelected = selectedAppPools.Contains(p.Name)
+                }).ToList();
+            }
         }
 
         public void Select(string name)
