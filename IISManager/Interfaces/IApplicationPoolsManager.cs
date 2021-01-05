@@ -8,6 +8,7 @@ namespace IISManager.Interfaces
     {
         ObservableList<ApplicationPool> ApplicationPools { get; }
         Observable<bool> AllSelected { get; }
+        Observable<SortingType> Sorting { get; }
         void Refresh();
         void Select(string name);
         void Unselect(string name);

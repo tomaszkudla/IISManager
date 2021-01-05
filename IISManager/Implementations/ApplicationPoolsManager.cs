@@ -36,6 +36,7 @@ namespace IISManager.Implementations
         }
 
         public Observable<bool> AllSelected { get; } = new Observable<bool>();
+        public Observable<SortingType> Sorting { get; } = new Observable<SortingType>(SortingType.ByIdAsc);
 
         public void Refresh()
         {

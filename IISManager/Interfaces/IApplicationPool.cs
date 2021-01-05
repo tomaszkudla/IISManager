@@ -8,6 +8,7 @@ namespace IISManager.Interfaces
     {
         bool IsSelected { get; set; }
         string Name { get; }
+        string Id { get; }
         ApplicationPoolState State { get; }
         ObservableList<WorkerProcess> WorkerProcesses { get; }
         void Recycle();
