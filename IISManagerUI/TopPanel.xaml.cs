@@ -93,5 +93,39 @@ namespace IISManagerUI
                 }
             });
         }
+
+        private void SortByName_Click(object sender, RoutedEventArgs e)
+        {
+            if (manager.Sorting.Value != SortingType.ByNameAsc)
+            {
+                manager.Sorting.Value = SortingType.ByNameAsc;
+            }
+            else
+            {
+                manager.Sorting.Value = SortingType.ByNameDsc;
+            }
+
+            Utils.SafeExecute(() =>
+            {
+                manager.Refresh();
+            });
+        }
+
+        private void SortByState_Click(object sender, RoutedEventArgs e)
+        {
+            if (manager.Sorting.Value != SortingType.ByStateAsc)
+            {
+                manager.Sorting.Value = SortingType.ByStateAsc;
+            }
+            else
+            {
+                manager.Sorting.Value = SortingType.ByStateDsc;
+            }
+
+            Utils.SafeExecute(() =>
+            {
+                manager.Refresh();
+            });
+        }
     }
 }

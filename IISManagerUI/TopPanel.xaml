@@ -15,6 +15,7 @@
             <Setter Property="Margin" Value="0" />
             <Setter Property="Padding" Value="2" />
             <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}" x:Key="GreenHover">
             <Style.Triggers>
@@ -30,11 +31,21 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}" x:Key="BlueHover">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#FFBEE6FD" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
@@ -48,9 +59,11 @@
         <Label Grid.Column="1" MouseDown="StartSelected_Click" ToolTip="Start selected" Content="▶️" Style="{StaticResource GreenHover}" />
         <Label Grid.Column="2" MouseDown="StopSelected_Click" ToolTip="Stop selected" Content="■" Style="{StaticResource RedHover}" />
         <Label Grid.Column="3" MouseDown="RecycleSelected_Click" ToolTip="Recycle selected" Content="⭮" Style="{StaticResource GreenHover}" />
-        <Label Grid.Column="5" Content="IIS" />
-        <Label Grid.Column="6" MouseDown="StartIIS_Click" ToolTip="Start IIS" Content="▶️" Style="{StaticResource GreenHover}" />
-        <Label Grid.Column="7" MouseDown="StopIIS_Click" ToolTip="Stop IIS" Content="■" Style="{StaticResource RedHover}" />
-        <Label Grid.Column="8" HorizontalAlignment="Left" FontSize="20" MouseDown="ResetIIS_Click" ToolTip="Reset IIS" Content="⭮" Style="{StaticResource GreenHover}" />
+        <Label Grid.Column="5" MouseDown="SortByName_Click" ToolTip="Sort by name" Content="⇵AZ" Style="{StaticResource BlueHover}" FontSize="14" />
+        <Label Grid.Column="6" MouseDown="SortByState_Click" ToolTip="Sort by state" Content="⇵▶️■" Style="{StaticResource BlueHover}" FontSize="14"/>
+        <Label Grid.Column="8" Content="IIS" />
+        <Label Grid.Column="9" MouseDown="StartIIS_Click" ToolTip="Start IIS" Content="▶️" Style="{StaticResource GreenHover}" />
+        <Label Grid.Column="10" MouseDown="StopIIS_Click" ToolTip="Stop IIS" Content="■" Style="{StaticResource RedHover}" />
+        <Label Grid.Column="11" HorizontalAlignment="Left" FontSize="20" MouseDown="ResetIIS_Click" ToolTip="Reset IIS" Content="⭮" Style="{StaticResource GreenHover}" />
     </Grid>
 </UserControl>
