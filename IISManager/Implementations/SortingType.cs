@@ -2,8 +2,7 @@
 {
     public enum SortingType
     {
-        ByIdAsc,
-        ByIdDsc,
+        None,
         ByNameAsc,
         ByNameDsc,
         ByStateAsc,

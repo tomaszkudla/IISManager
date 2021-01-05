@@ -11,20 +11,17 @@ namespace IISManager.Implementations
         private readonly ObservableList<WorkerProcess> workerProcesses = new ObservableList<WorkerProcess>();
         private readonly Microsoft.Web.Administration.ApplicationPool applicationPool;
         private readonly string name;
-        private readonly string id;
         private readonly ApplicationPoolState state;
 
         public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool)
         {
             this.applicationPool = applicationPool;
             name = applicationPool.Name;
-            id = applicationPool.GetAttributeValue("applicationPoolSid").ToString();
             state = (ApplicationPoolState)(int)applicationPool.State;
             workerProcesses.Value = GetWorkerProcesses(applicationPool);
         }
 
         public string Name { get => name; }
-        public string Id { get => id; }
         public ApplicationPoolState State { get => state; }
 
         public ObservableList<WorkerProcess> WorkerProcesses => workerProcesses;
