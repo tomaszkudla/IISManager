@@ -107,7 +107,7 @@
                                             <ColumnDefinition Width="20" />
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="40" />
                                             <ColumnDefinition Width="8*" />
                                         </Grid.ColumnDefinitions>
                                         <Label Grid.Column="1" Content="▸" Style="{StaticResource DarkLabel}"/>
