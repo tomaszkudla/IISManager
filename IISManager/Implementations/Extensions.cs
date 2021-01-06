@@ -21,5 +21,15 @@ namespace IISManager.Implementations
                     return applicationPools.ToList();
             }
         }
+
+        public static List<ApplicationPool> FilterAppPools(this IEnumerable<ApplicationPool> applicationPools, string filter)
+        {
+            if (string.IsNullOrEmpty(filter))
+            {
+                return applicationPools.ToList();
+            }
+
+            return applicationPools.Where(p => p.Name.IndexOf(filter, System.StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+        }
     }
 }

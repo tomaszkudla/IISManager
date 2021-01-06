@@ -1,6 +1,4 @@
 ﻿using IISManager.Implementations;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace IISManager.Interfaces
 {
@@ -9,6 +7,7 @@ namespace IISManager.Interfaces
         ObservableList<ApplicationPool> ApplicationPools { get; }
         Observable<bool> AllSelected { get; }
         Observable<SortingType> Sorting { get; }
+        Observable<string> Filter { get; }
         void Refresh();
         void Select(string name);
         void Unselect(string name);

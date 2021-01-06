@@ -28,6 +28,7 @@ namespace IISManagerUI
             manager = ApplicationPoolsManager.Instance;
             iisServerManager = IISServerManager.Instance;
             selectAllCheckBox.DataContext = manager.AllSelected;
+            searchTextBox.DataContext = manager.Filter;
         }
 
         private void StartSelected_Click(object sender, RoutedEventArgs e)
@@ -104,8 +105,6 @@ namespace IISManagerUI
             {
                 manager.Sorting.Value = SortingType.ByNameDsc;
             }
-
-            manager.ApplicationPools.Value = manager.ApplicationPools.Value.OrderAppPoolsBy(manager.Sorting.Value);
         }
 
         private void SortByState_Click(object sender, RoutedEventArgs e)
@@ -118,8 +117,6 @@ namespace IISManagerUI
             {
                 manager.Sorting.Value = SortingType.ByStateDsc;
             }
-
-            manager.ApplicationPools.Value = manager.ApplicationPools.Value.OrderAppPoolsBy(manager.Sorting.Value);
         }
     }
 }
