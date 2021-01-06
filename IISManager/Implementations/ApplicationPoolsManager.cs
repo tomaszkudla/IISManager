@@ -53,7 +53,10 @@ namespace IISManager.Implementations
                 });
 
                 applicationPools.Value = appPoolsRaw.FilterAppPools(Filter.Value).OrderAppPoolsBy(Sorting.Value);
+
+                CpuUsageCounters.Instance.GetCpuUsages(serverManager.WorkerProcesses.Select(p => p.ProcessId));
             }
+
         }
 
         public void Select(string name)

@@ -6,5 +6,6 @@ namespace IISManager.Interfaces
     {
         int Id { get; }
         WorkerProcessState State { get; }
+        float CpuUsage { get; }
     }
 }

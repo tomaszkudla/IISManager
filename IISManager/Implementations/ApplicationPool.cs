@@ -72,7 +72,7 @@ namespace IISManager.Implementations
         {
             if (applicationPool.State != ObjectState.Stopped)
             {
-                return applicationPool.WorkerProcesses.Select(p => new WorkerProcess(p)).ToList();
+                return applicationPool.WorkerProcesses.Select(p => new WorkerProcess(p, (float)0.0)).ToList();
             }
 
             return new List<WorkerProcess>();
