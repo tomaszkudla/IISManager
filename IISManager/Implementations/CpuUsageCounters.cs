@@ -30,57 +30,52 @@ namespace IISManager.Implementations
 
         public Dictionary<int, float> GetCpuUsages(IEnumerable<int> processIds)
         {
-            var processNamesForIds = GetProcessNamesForIds(processIds);
+            var sw = Stopwatch.StartNew();
+            var processIdsSet = new HashSet<int>(processIds.Distinct());
+            var processNamesForIds = GetProcessNamesForIds(processIdsSet);
             var result = new Dictionary<int, float>();
-            foreach (var id in processIds.Distinct())
+            foreach (var id in processIdsSet)
             {
-                //var cachedCounter = cpuUsageCountersCache.GetItem(id.ToString());
-                //if (cachedCounter == null)
-                //{
+                if (processNamesForIds.TryGetValue(id, out var name))
+                {
+                    var counter = new PerformanceCounter("Process", "% Processor Time", name, true);
 
-                //}
-                //else
-                //{
-                //    result.Add(id, cachedCounter.NextValue());
-                //}
+                    result.Add(id, counter.NextValue());
 
+                }
             }
 
+            sw.Stop();
+            var test = sw.Elapsed;
+
+            if (result.Any(r => r.Value > (float)0.00001))
+            {
+                test = sw.Elapsed;
+            }
             return result;
         }
 
-        private Dictionary<int, string> GetProcessNamesForIds(IEnumerable<int> processIds)
+        private Dictionary<int, string> GetProcessNamesForIds(HashSet<int> processIds)
         {
-            var w3wpProcessesCount = Process.GetProcessesByName(w3wpProcessName).Length;
-            var w3wpProcessesNames = GenerateW3wpProcessesNames(w3wpProcessesCount);
-            var idsAndNamesLookup = w3wpProcessesNames.ToLookup(n => new PerformanceCounter("Process", "ID Process", n, true).NextValue(), n => n).Distinct();
+            var sw = Stopwatch.StartNew();
+            PerformanceCounterCategory cat = new PerformanceCounterCategory("Process");
+
+            var names = cat.GetInstanceNames().Where(n => n.Contains(w3wpProcessName));
             var result = new Dictionary<int, string>();
-            foreach (var idAndName in idsAndNamesLookup)
+            foreach (var name in names)
             {
-                var id = (int)idAndName.Key;
-                var name = idAndName.FirstOrDefault();
-                if (!result.ContainsKey(id))
+                var counter = new PerformanceCounter("Process", "ID Process", name, true);
+
+                int id = (int)counter.RawValue;
+                if (processIds.Contains(id))
                 {
                     result.Add(id, name);
                 }
-            }
 
+            }
+            sw.Stop();
+            var test = sw.Elapsed;
             return result;
-        }
-
-        private IEnumerable<string> GenerateW3wpProcessesNames(int count)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                if (i == 0)
-                {
-                    yield return w3wpProcessName;
-                }
-                else
-                {
-                    yield return $"{w3wpProcessName}#{i}";
-                }
-            }
         }
     }
 }
