@@ -118,5 +118,10 @@ namespace IISManagerUI
                 manager.Sorting.Value = SortingType.ByStateDsc;
             }
         }
+
+        private void ClearFilter_Click(object sender, RoutedEventArgs e)
+        {
+            manager.Filter.Value = string.Empty;
+        }
     }
 }
