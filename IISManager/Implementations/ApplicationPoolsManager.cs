@@ -16,6 +16,7 @@ namespace IISManager.Implementations
 
         private ApplicationPoolsManager()
         {
+            Refresh();
         }
 
         public static ApplicationPoolsManager Instance
@@ -30,7 +31,6 @@ namespace IISManager.Implementations
         {
             get
             {
-                Refresh();
                 return applicationPools;
             }
         }
@@ -48,24 +48,7 @@ namespace IISManager.Implementations
                     IsSelected = selectedAppPools.Contains(p.Name)
                 });
 
-                switch (Sorting.Value)
-                {
-                    case SortingType.ByNameAsc:
-                        applicationPools.Value = appPoolsUnordered.OrderBy(p => p.Name).ToList();
-                        break;
-                    case SortingType.ByNameDsc:
-                        applicationPools.Value = appPoolsUnordered.OrderByDescending(p => p.Name).ToList();
-                        break;
-                    case SortingType.ByStateAsc:
-                        applicationPools.Value = appPoolsUnordered.OrderBy(p => p.State).ThenBy(p => p.Name).ToList();
-                        break;
-                    case SortingType.ByStateDsc:
-                        applicationPools.Value = appPoolsUnordered.OrderByDescending(p => p.State).ThenBy(p => p.Name).ToList();
-                        break;
-                    default:
-                        applicationPools.Value = appPoolsUnordered.ToList();
-                        break;
-                }
+                applicationPools.Value = appPoolsUnordered.OrderAppPoolsBy(Sorting.Value);
             }
         }
 
