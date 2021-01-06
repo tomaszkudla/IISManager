@@ -7,6 +7,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="800" Background="#111111">
     <UserControl.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Foreground" Value="#E6E6E6" />
+            <Setter Property="Background" Value="#FF252526" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
         <Style TargetType="Label">
             <Setter Property="FontSize" Value="20" />
             <Setter Property="Foreground" Value="#E6E6E6" />
@@ -15,6 +23,7 @@
             <Setter Property="Margin" Value="0" />
             <Setter Property="Padding" Value="2" />
             <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}" x:Key="GreenHover">
             <Style.Triggers>
@@ -30,12 +39,26 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}" x:Key="BlueHover">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#FFBEE6FD" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="5*" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
@@ -48,9 +71,14 @@
         <Label Grid.Column="1" MouseDown="StartSelected_Click" ToolTip="Start selected" Content="▶️" Style="{StaticResource GreenHover}" />
         <Label Grid.Column="2" MouseDown="StopSelected_Click" ToolTip="Stop selected" Content="■" Style="{StaticResource RedHover}" />
         <Label Grid.Column="3" MouseDown="RecycleSelected_Click" ToolTip="Recycle selected" Content="⭮" Style="{StaticResource GreenHover}" />
-        <Label Grid.Column="5" Content="IIS" />
-        <Label Grid.Column="6" MouseDown="StartIIS_Click" ToolTip="Start IIS" Content="▶️" Style="{StaticResource GreenHover}" />
-        <Label Grid.Column="7" MouseDown="StopIIS_Click" ToolTip="Stop IIS" Content="■" Style="{StaticResource RedHover}" />
-        <Label Grid.Column="8" HorizontalAlignment="Left" FontSize="20" MouseDown="ResetIIS_Click" ToolTip="Reset IIS" Content="⭮" Style="{StaticResource GreenHover}" />
+        <Label Grid.Column="5" MouseDown="SortByName_Click" ToolTip="Sort by name" Content="⇵AZ" Style="{StaticResource BlueHover}" FontSize="14" />
+        <Label Grid.Column="6" MouseDown="SortByState_Click" ToolTip="Sort by state" Content="⇵▶️■" Style="{StaticResource BlueHover}" FontSize="14"/>
+        <Label Grid.Column="8" Content="⌕" />
+        <TextBox Grid.Column="9" Name="searchTextBox"  Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Column="10" MouseDown="ClearFilter_Click" ToolTip="Clear filter" Content="🞩" Style="{StaticResource BlueHover}" FontSize="14" />
+        <Label Grid.Column="12" Content="IIS" />
+        <Label Grid.Column="13" MouseDown="StartIIS_Click" ToolTip="Start IIS" Content="▶️" Style="{StaticResource GreenHover}" />
+        <Label Grid.Column="14" MouseDown="StopIIS_Click" ToolTip="Stop IIS" Content="■" Style="{StaticResource RedHover}" />
+        <Label Grid.Column="15" HorizontalAlignment="Left" FontSize="20" MouseDown="ResetIIS_Click" ToolTip="Reset IIS" Content="⭮" Style="{StaticResource GreenHover}" />
     </Grid>
 </UserControl>

@@ -1,6 +1,7 @@
 ﻿using IISManager.Interfaces;
 using Microsoft.Web.Administration;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace IISManager.Implementations
@@ -16,6 +17,9 @@ namespace IISManager.Implementations
 
         private ApplicationPoolsManager()
         {
+            Sorting.PropertyChanged += RefreshFiltering;
+            Filter.PropertyChanged += RefreshFiltering;
+            Refresh();
         }
 
         public static ApplicationPoolsManager Instance
@@ -30,22 +34,25 @@ namespace IISManager.Implementations
         {
             get
             {
-                Refresh();
                 return applicationPools;
             }
         }
 
         public Observable<bool> AllSelected { get; } = new Observable<bool>();
+        public Observable<SortingType> Sorting { get; } = new Observable<SortingType>(SortingType.ByNameAsc);
+        public Observable<string> Filter { get; } = new Observable<string>(string.Empty);
 
         public void Refresh()
         {
             var selectedAppPools = new HashSet<string>(applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name));
             using (var serverManager = new ServerManager())
             {
-                applicationPools.Value = serverManager.ApplicationPools.Select(p => new ApplicationPool(p)
+                var appPoolsRaw = serverManager.ApplicationPools.Select(p => new ApplicationPool(p)
                 {
                     IsSelected = selectedAppPools.Contains(p.Name)
-                }).ToList();
+                });
+
+                applicationPools.Value = appPoolsRaw.FilterAppPools(Filter.Value).OrderAppPoolsBy(Sorting.Value);
             }
         }
 
@@ -107,6 +114,11 @@ namespace IISManager.Implementations
             {
                 appPool.Recycle();
             }
+        }
+        
+        private void RefreshFiltering(object sender, PropertyChangedEventArgs e)
+        {
+            ApplicationPools.Value = ApplicationPools.Value.FilterAppPools(Filter.Value).OrderAppPoolsBy(Sorting.Value);
         }
     }
 }
