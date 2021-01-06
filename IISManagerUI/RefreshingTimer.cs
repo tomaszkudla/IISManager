@@ -35,7 +35,7 @@ namespace IISManagerUI
         private void SetupTimer()
         {
             timer.Tick += DispatcherTimer_Tick;
-            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Interval = TimeSpan.FromMilliseconds(Configuration.RefreshingInterval);
             timer.Start();
         }
     }
