@@ -10,7 +10,8 @@ namespace IISManager.Implementations
         const string w3wpProcessName = "w3wp";
         private static readonly CpuUsageCounters instance = new CpuUsageCounters();
         private readonly GenericMemoryCache<PerformanceCounter> cpuUsageCountersCache = new GenericMemoryCache<PerformanceCounter>("CPU-USAGE-COUNTERS", TimeSpan.FromMinutes(5));
-        private readonly GenericMemoryCache<PerformanceCounter> processCountersCache = new GenericMemoryCache<PerformanceCounter>("CPU-USAGE-COUNTERS", TimeSpan.FromMinutes(5));
+
+        private readonly Dictionary<int, Tuple<DateTime, TimeSpan>> lastValues = new Dictionary<int, Tuple<DateTime, TimeSpan>>();
 
         static CpuUsageCounters()
         {
@@ -28,53 +29,38 @@ namespace IISManager.Implementations
             }
         }
 
-        public Dictionary<int, float> GetCpuUsages(IEnumerable<int> processIds)
+        public Dictionary<int, double> GetCpuUsages(IEnumerable<int> processIds)
         {
             var sw = Stopwatch.StartNew();
-            var processIdsSet = new HashSet<int>(processIds.Distinct());
-            var processNamesForIds = GetProcessNamesForIds(processIdsSet);
-            var result = new Dictionary<int, float>();
-            foreach (var id in processIdsSet)
+            var result = new Dictionary<int, double>();
+            foreach (var id in processIds)
             {
-                if (processNamesForIds.TryGetValue(id, out var name))
+                var process = Process.GetProcessById(id);
+                if (lastValues.TryGetValue(id, out var lastValue))
                 {
-                    var counter = new PerformanceCounter("Process", "% Processor Time", name, true);
+                    var curTime = DateTime.Now;
+                    var curTotalProcessorTime = process.TotalProcessorTime;
 
-                    result.Add(id, counter.NextValue());
+                    var lastTime = lastValue.Item1;
+                    var lastTotalProcessorTime = lastValue.Item2;
 
+                    var cpuUsage = (curTotalProcessorTime.TotalMilliseconds - lastTotalProcessorTime.TotalMilliseconds) / curTime.Subtract(lastTime).TotalMilliseconds / Convert.ToDouble(Environment.ProcessorCount);
+                    result.Add(id, cpuUsage);
+                    lastValues[id] = new Tuple<DateTime, TimeSpan>(curTime, curTotalProcessorTime);
+                }
+                else
+                {
+                    lastValues.Add(id, new Tuple<DateTime, TimeSpan>(DateTime.Now, process.TotalProcessorTime));
+                    result.Add(id, 0.0);
                 }
             }
 
             sw.Stop();
-            var test = sw.Elapsed;
-
-            if (result.Any(r => r.Value > (float)0.00001))
+            if (result.Any(r => r.Value > 0.01))
             {
-                test = sw.Elapsed;
+
+                var test = sw.Elapsed;
             }
-            return result;
-        }
-
-        private Dictionary<int, string> GetProcessNamesForIds(HashSet<int> processIds)
-        {
-            var sw = Stopwatch.StartNew();
-            PerformanceCounterCategory cat = new PerformanceCounterCategory("Process");
-
-            var names = cat.GetInstanceNames().Where(n => n.Contains(w3wpProcessName));
-            var result = new Dictionary<int, string>();
-            foreach (var name in names)
-            {
-                var counter = new PerformanceCounter("Process", "ID Process", name, true);
-
-                int id = (int)counter.RawValue;
-                if (processIds.Contains(id))
-                {
-                    result.Add(id, name);
-                }
-
-            }
-            sw.Stop();
-            var test = sw.Elapsed;
             return result;
         }
     }

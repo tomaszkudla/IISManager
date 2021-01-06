@@ -8,9 +8,9 @@ namespace IISManager.Implementations
         private readonly Microsoft.Web.Administration.WorkerProcess workerProcess;
         private readonly int id;
         private readonly WorkerProcessState state;
-        private readonly float cpuUsage;
+        private readonly double cpuUsage;
 
-        public WorkerProcess(Microsoft.Web.Administration.WorkerProcess workerProcess, float cpuUsage)
+        public WorkerProcess(Microsoft.Web.Administration.WorkerProcess workerProcess, double cpuUsage)
         {
             this.workerProcess = workerProcess;
             id = workerProcess.ProcessId;
@@ -20,7 +20,7 @@ namespace IISManager.Implementations
 
         public int Id { get => id; }
         public WorkerProcessState State { get => state; }
-        public float CpuUsage { get => cpuUsage; }
+        public double CpuUsage { get => cpuUsage; }
 
         public bool Equals(WorkerProcess other)
         {
