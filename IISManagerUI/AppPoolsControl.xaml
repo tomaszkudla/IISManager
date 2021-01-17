@@ -147,7 +147,7 @@
                                         <Label Grid.Column="1" Content="▸" Style="{StaticResource DarkLabel}"/>
                                         <Label Grid.Column="2" MouseDown="CopyId_Click" Tag="{Binding Id, Mode=OneWay}" Content="⧉" Style="{StaticResource BlueHover}" ToolTip="Copy to clipboard" />
                                         <TextBox Grid.Column="3" Text="{Binding Id, Mode=OneWay}" Style="{StaticResource DarkTextBox}"/>
-                                        <Label Grid.Column="4" MouseDown="KillProcess_Click" Tag="{Binding Id, Mode=OneWay}" Content="❌" Style="{StaticResource RedHover}" ToolTip="Kill the process" HorizontalAlignment="Left" />
+                                        <Label Grid.Column="4" MouseDown="KillProcess_Click" Tag="{Binding Id, Mode=OneWay}" Content="❌" Style="{StaticResource RedHover}" ToolTip="Kill the process" />
                                         <TextBox Grid.Column="5" Text="{Binding State, Mode=OneWay}" Style="{StaticResource WorkerProcessState}"/>
                                         <TextBox Grid.Column="6" Text="{Binding WorkerProcessDiagnosticValues.CpuUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource CpuUsage}" />
                                         <TextBox Grid.Column="7" Text="{Binding WorkerProcessDiagnosticValues.MemoryUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource MemoryUsage}" />
