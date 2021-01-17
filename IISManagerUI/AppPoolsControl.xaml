@@ -4,9 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IISManagerUI"
+             xmlns:converters="clr-namespace:IISManagerUI.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <converters:ThresholdConverter x:Key="cpuUsageConverter"/>
+        <converters:ThresholdConverter x:Key="memoryUsageConverter"/>
         <Style TargetType="Rectangle" x:Key="HorizontalLine">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="Fill" Value="#111111" />
@@ -55,20 +58,20 @@
         </Style>
         <Style TargetType="TextBox" BasedOn="{StaticResource DarkTextBox}" x:Key="CpuUsage">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.CpuUsage.State}" Value="Medium">
+                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.CpuUsage.Value, Converter={StaticResource cpuUsageConverter}}" Value="Medium">
                     <Setter Property="Foreground" Value="Yellow" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.CpuUsage.State}" Value="High">
+                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.CpuUsage.Value, Converter={StaticResource cpuUsageConverter}}" Value="High">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style TargetType="TextBox" BasedOn="{StaticResource DarkTextBox}" x:Key="MemoryUsage">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.MemoryUsage.State}" Value="Medium">
+                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.MemoryUsage.Value, Converter={StaticResource memoryUsageConverter}}" Value="Medium">
                     <Setter Property="Foreground" Value="Yellow" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.MemoryUsage.State}" Value="High">
+                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.MemoryUsage.Value, Converter={StaticResource memoryUsageConverter}}" Value="High">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
             </Style.Triggers>
@@ -136,8 +139,8 @@
                                         <Label Grid.Column="2" MouseDown="CopyId_Click" Tag="{Binding Id, Mode=OneWay}" Content="⧉" Style="{StaticResource BlueHover}" ToolTip="Copy to clipboard" />
                                         <TextBox Grid.Column="3" Text="{Binding Id, Mode=OneWay}" Style="{StaticResource DarkTextBox}"/>
                                         <TextBox Grid.Column="4" Text="{Binding State, Mode=OneWay}" Style="{StaticResource WorkerProcessState}"/>
-                                        <TextBox Grid.Column="5" Text="{Binding WorkerProcessDiagnosticValues.CpuUsage, Mode=OneWay}" Style="{StaticResource CpuUsage}" />
-                                        <TextBox Grid.Column="6" Text="{Binding WorkerProcessDiagnosticValues.MemoryUsage, Mode=OneWay}" Style="{StaticResource MemoryUsage}" />
+                                        <TextBox Grid.Column="5" Text="{Binding WorkerProcessDiagnosticValues.CpuUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource CpuUsage}" />
+                                        <TextBox Grid.Column="6" Text="{Binding WorkerProcessDiagnosticValues.MemoryUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource MemoryUsage}" />
                                     </Grid>
                                 </Grid>
                             </DataTemplate>

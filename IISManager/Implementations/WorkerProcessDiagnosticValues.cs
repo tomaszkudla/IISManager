@@ -6,8 +6,8 @@ namespace IISManager.Implementations
     {
         public WorkerProcessDiagnosticValues(double cpuUsage, double memoryUsage)
         {
-            CpuUsage = new DiagnosticValue(cpuUsage, 10.0, 30.0, "{0:F2}%");
-            MemoryUsage = new DiagnosticValue(memoryUsage, 10.0, 100.0, "{0:F2}MB");
+            CpuUsage = new DiagnosticValue(cpuUsage, "{0:F2}%");
+            MemoryUsage = new DiagnosticValue(memoryUsage, "{0:F2}MB");
         }
 
         public DiagnosticValue CpuUsage { get; }

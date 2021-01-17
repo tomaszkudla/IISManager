@@ -1,4 +1,5 @@
 ﻿using IISManager.Implementations;
+using IISManagerUI.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,6 +27,12 @@ namespace IISManagerUI
         public AppPoolsControl()
         {
             InitializeComponent();
+            var cpuUsageConverter = Resources["cpuUsageConverter"] as ThresholdConverter;
+            cpuUsageConverter.MediumThreshold = Configuration.CpuUsageMediumThreshold;
+            cpuUsageConverter.HighThreshold = Configuration.CpuUsageHighThreshold;
+            var memoryUsageConverter = Resources["memoryUsageConverter"] as ThresholdConverter;
+            memoryUsageConverter.MediumThreshold = Configuration.MemoryUsageMediumThreshold;
+            memoryUsageConverter.HighThreshold = Configuration.MemoryUsageHighThreshold;
             manager = ApplicationPoolsManager.Instance;
             timer = RefreshingTimer.Instance;
             timer.Tick += Timer_Tick;
