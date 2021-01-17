@@ -3,30 +3,30 @@ using System;
 
 namespace IISManager.Implementations
 {
-    public class WorkerProcess : IWorkerProcess, IEquatable<WorkerProcess>
+    public class WorkerProcess : IEquatable<WorkerProcess>
     {
         private readonly Microsoft.Web.Administration.WorkerProcess workerProcess;
         private readonly int id;
         private readonly WorkerProcessState state;
-        private readonly double cpuUsage;
+        private readonly WorkerProcessDiagnosticValues workerProcessDiagnostics;
 
-        public WorkerProcess(Microsoft.Web.Administration.WorkerProcess workerProcess, double cpuUsage)
+        public WorkerProcess(Microsoft.Web.Administration.WorkerProcess workerProcess, WorkerProcessDiagnosticValues workerProcessDiagnostics)
         {
             this.workerProcess = workerProcess;
             id = workerProcess.ProcessId;
             state = (WorkerProcessState)(int)workerProcess.State;
-            this.cpuUsage = cpuUsage;
+            this.workerProcessDiagnostics = workerProcessDiagnostics;
         }
 
         public int Id { get => id; }
         public WorkerProcessState State { get => state; }
-        public double CpuUsage { get => cpuUsage; }
+        public WorkerProcessDiagnosticValues WorkerProcessDiagnosticValues { get => workerProcessDiagnostics; }
 
         public bool Equals(WorkerProcess other)
         {
             return this.Id == other.Id &&
                 this.State == other.State &&
-                Math.Abs(this.CpuUsage-other.CpuUsage) < 0.01;
+                this.workerProcessDiagnostics == other.workerProcessDiagnostics;
         }
     }
 }

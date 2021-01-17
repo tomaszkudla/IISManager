@@ -12,14 +12,14 @@ namespace IISManager.Implementations
         private readonly Microsoft.Web.Administration.ApplicationPool applicationPool;
         private readonly string name;
         private readonly ApplicationPoolState state;
-        private readonly CpuUsageCounters cpuUsageCounters;
+        private readonly WorkerProcessDiagnostics cpuUsageCounters;
 
         public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool)
         {
             this.applicationPool = applicationPool;
             name = applicationPool.Name;
             state = (ApplicationPoolState)(int)applicationPool.State;
-            cpuUsageCounters = CpuUsageCounters.Instance;
+            cpuUsageCounters = WorkerProcessDiagnostics.Instance;
             workerProcesses.Value = GetWorkerProcesses(applicationPool);
         }
 
@@ -74,7 +74,7 @@ namespace IISManager.Implementations
         {
             if (applicationPool.State != ObjectState.Stopped)
             {
-                return applicationPool.WorkerProcesses.Select(p => new WorkerProcess(p, cpuUsageCounters.GetCpuUsagesForProcessId(p.ProcessId))).ToList();
+                return applicationPool.WorkerProcesses.Select(p => new WorkerProcess(p, cpuUsageCounters.GetWorkerProcessDiagnosticValuesForProcessId(p.ProcessId))).ToList();
             }
 
             return new List<WorkerProcess>();

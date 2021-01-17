@@ -47,7 +47,7 @@ namespace IISManager.Implementations
             var selectedAppPools = new HashSet<string>(applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name));
             using (var serverManager = new ServerManager())
             {
-                CpuUsageCounters.Instance.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
+                WorkerProcessDiagnostics.Instance.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
                 var appPoolsRaw = serverManager.ApplicationPools.Select(p => new ApplicationPool(p)
                 {
                     IsSelected = selectedAppPools.Contains(p.Name)
