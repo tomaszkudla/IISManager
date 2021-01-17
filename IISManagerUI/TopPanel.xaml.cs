@@ -119,6 +119,18 @@ namespace IISManagerUI
             }
         }
 
+        private void SortByCpuUsage_Click(object sender, RoutedEventArgs e)
+        {
+            if (manager.Sorting.Value != SortingType.ByCpuUsageDsc)
+            {
+                manager.Sorting.Value = SortingType.ByCpuUsageDsc;
+            }
+            else
+            {
+                manager.Sorting.Value = SortingType.ByCpuUsageAsc;
+            }
+        }
+
         private void ClearFilter_Click(object sender, RoutedEventArgs e)
         {
             manager.Filter.Value = string.Empty;

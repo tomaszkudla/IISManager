@@ -7,5 +7,7 @@
         ByNameDsc,
         ByStateAsc,
         ByStateDsc,
+        ByCpuUsageAsc,
+        ByCpuUsageDsc,
     }
 }

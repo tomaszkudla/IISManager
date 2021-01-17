@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace IISManager.Implementations
@@ -17,6 +18,10 @@ namespace IISManager.Implementations
                     return applicationPools.OrderBy(p => p.State).ThenBy(p => p.Name).ToList();
                 case SortingType.ByStateDsc:
                     return applicationPools.OrderByDescending(p => p.State).ThenBy(p => p.Name).ToList();
+                case SortingType.ByCpuUsageAsc:
+                    return applicationPools.OrderBy(p => p.WorkerProcesses.Value.Max(wp => wp.WorkerProcessDiagnosticValues.CpuUsage)).ThenByDescending(p => p.State).ThenBy(p => p.Name).ToList();
+                case SortingType.ByCpuUsageDsc:
+                    return applicationPools.OrderByDescending(p => p.WorkerProcesses.Value.Max(wp => wp.WorkerProcessDiagnosticValues.CpuUsage)).ThenBy(p => p.State).ThenBy(p => p.Name).ToList();
                 default:
                     return applicationPools.ToList();
             }
