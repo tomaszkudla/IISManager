@@ -53,6 +53,26 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource DarkTextBox}" x:Key="CpuUsage">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.CpuUsage.State}" Value="Medium">
+                    <Setter Property="Foreground" Value="Yellow" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.CpuUsage.State}" Value="High">
+                    <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource DarkTextBox}" x:Key="MemoryUsage">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.MemoryUsage.State}" Value="Medium">
+                    <Setter Property="Foreground" Value="Yellow" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.MemoryUsage.State}" Value="High">
+                    <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <Style TargetType="Label">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="#E6E6E6" />
@@ -116,8 +136,8 @@
                                         <Label Grid.Column="2" MouseDown="CopyId_Click" Tag="{Binding Id, Mode=OneWay}" Content="⧉" Style="{StaticResource BlueHover}" ToolTip="Copy to clipboard" />
                                         <TextBox Grid.Column="3" Text="{Binding Id, Mode=OneWay}" Style="{StaticResource DarkTextBox}"/>
                                         <TextBox Grid.Column="4" Text="{Binding State, Mode=OneWay}" Style="{StaticResource WorkerProcessState}"/>
-                                        <TextBox Grid.Column="5" Text="{Binding WorkerProcessDiagnosticValues.CpuUsage, Mode=OneWay}" Style="{StaticResource DarkTextBox}" />
-                                        <TextBox Grid.Column="6" Text="{Binding WorkerProcessDiagnosticValues.MemoryUsage, Mode=OneWay}" Style="{StaticResource DarkTextBox}" />
+                                        <TextBox Grid.Column="5" Text="{Binding WorkerProcessDiagnosticValues.CpuUsage, Mode=OneWay}" Style="{StaticResource CpuUsage}" />
+                                        <TextBox Grid.Column="6" Text="{Binding WorkerProcessDiagnosticValues.MemoryUsage, Mode=OneWay}" Style="{StaticResource MemoryUsage}" />
                                     </Grid>
                                 </Grid>
                             </DataTemplate>
