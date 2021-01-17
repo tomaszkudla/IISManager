@@ -95,6 +95,14 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="Label" BasedOn="{StaticResource DarkLabel}" x:Key="RedHover">
+            <Setter Property="Padding" Value="0,0,2,0" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="Red" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <ItemsControl Name="applicationPoolsControl" Background="#FC333333" ItemsSource="{Binding Value, Mode=OneWay}">
         <ItemsControl.ItemTemplate>
@@ -131,6 +139,7 @@
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="60" />
                                             <ColumnDefinition Width="60" />
                                             <ColumnDefinition Width="8*" />
@@ -138,9 +147,10 @@
                                         <Label Grid.Column="1" Content="▸" Style="{StaticResource DarkLabel}"/>
                                         <Label Grid.Column="2" MouseDown="CopyId_Click" Tag="{Binding Id, Mode=OneWay}" Content="⧉" Style="{StaticResource BlueHover}" ToolTip="Copy to clipboard" />
                                         <TextBox Grid.Column="3" Text="{Binding Id, Mode=OneWay}" Style="{StaticResource DarkTextBox}"/>
-                                        <TextBox Grid.Column="4" Text="{Binding State, Mode=OneWay}" Style="{StaticResource WorkerProcessState}"/>
-                                        <TextBox Grid.Column="5" Text="{Binding WorkerProcessDiagnosticValues.CpuUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource CpuUsage}" />
-                                        <TextBox Grid.Column="6" Text="{Binding WorkerProcessDiagnosticValues.MemoryUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource MemoryUsage}" />
+                                        <Label Grid.Column="4" MouseDown="KillProcess_Click" Tag="{Binding Id, Mode=OneWay}" Content="❌" Style="{StaticResource RedHover}" ToolTip="Kill the process" HorizontalAlignment="Left" />
+                                        <TextBox Grid.Column="5" Text="{Binding State, Mode=OneWay}" Style="{StaticResource WorkerProcessState}"/>
+                                        <TextBox Grid.Column="6" Text="{Binding WorkerProcessDiagnosticValues.CpuUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource CpuUsage}" />
+                                        <TextBox Grid.Column="7" Text="{Binding WorkerProcessDiagnosticValues.MemoryUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource MemoryUsage}" />
                                     </Grid>
                                 </Grid>
                             </DataTemplate>

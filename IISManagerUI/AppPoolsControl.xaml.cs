@@ -108,5 +108,15 @@ namespace IISManagerUI
                 manager.Unselect(appPoolName);
             });
         }
+
+        private void KillProcess_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.SafeExecute(() =>
+            {
+                var button = sender as Label;
+                var id = int.Parse(button.Tag.ToString());
+                ProcessUtils.KillProcess(id);
+            });
+        }
     }
 }
