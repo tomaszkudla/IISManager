@@ -31,8 +31,9 @@ namespace IISManagerUI
             cpuUsageConverter.MediumThreshold = Configuration.CpuUsageMediumThreshold;
             cpuUsageConverter.HighThreshold = Configuration.CpuUsageHighThreshold;
             var memoryUsageConverter = Resources["memoryUsageConverter"] as ThresholdConverter;
-            memoryUsageConverter.MediumThreshold = Configuration.MemoryUsageMediumThreshold;
-            memoryUsageConverter.HighThreshold = Configuration.MemoryUsageHighThreshold;
+            var totalMemory = Utils.GetTotalMemory() ?? 16384.0;
+            memoryUsageConverter.MediumThreshold = Configuration.MemoryUsageMediumThreshold * totalMemory / 100.0;
+            memoryUsageConverter.HighThreshold = Configuration.MemoryUsageHighThreshold * totalMemory / 100.0;
             manager = ApplicationPoolsManager.Instance;
             timer = RefreshingTimer.Instance;
             timer.Tick += Timer_Tick;

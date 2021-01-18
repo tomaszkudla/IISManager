@@ -70,7 +70,7 @@ namespace IISManagerUI
                     return value;
                 }
 
-                return 100.0;
+                return 30.0;
             }
         }
     }
