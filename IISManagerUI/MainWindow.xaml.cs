@@ -9,7 +9,14 @@ namespace IISManagerUI
     {
         public MainWindow()
         {
+            this.LocationChanged += MainWindow_LocationChanged;
             InitializeComponent();
         }
+
+        private void MainWindow_LocationChanged(object sender, System.EventArgs e)
+        {
+            RefreshingTimer.Instance.PauseForNextTick();
+        }
+
     }
 }
