@@ -1,13 +1,14 @@
 ﻿using IISManager.Interfaces;
 using System;
+using System.ComponentModel;
 
 namespace IISManager.Implementations
 {
-    public class WorkerProcess : IEquatable<WorkerProcess>
+    public class WorkerProcess : IEquatable<WorkerProcess>, INotifyPropertyChanged
     {
         private readonly Microsoft.Web.Administration.WorkerProcess workerProcess;
-        private readonly int id;
-        private readonly WorkerProcessState state;
+        private int id;
+        private WorkerProcessState state;
         private readonly WorkerProcessDiagnosticValues workerProcessDiagnostics;
 
         public WorkerProcess(Microsoft.Web.Administration.WorkerProcess workerProcess, WorkerProcessDiagnosticValues workerProcessDiagnostics)
@@ -18,9 +19,35 @@ namespace IISManager.Implementations
             this.workerProcessDiagnostics = workerProcessDiagnostics;
         }
 
-        public int Id { get => id; }
-        public WorkerProcessState State { get => state; }
+        public int Id
+        {
+            get { return id; }
+            set
+            {
+                if (this.id != value)
+                {
+                    this.id = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs("Id"));
+                }
+            }
+        }
+
+        public WorkerProcessState State
+        {
+            get { return state; }
+            set
+            {
+                if (this.state != value)
+                {
+                    this.state = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs("State"));
+                }
+            }
+        }
+
         public WorkerProcessDiagnosticValues WorkerProcessDiagnosticValues { get => workerProcessDiagnostics; }
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public bool Equals(WorkerProcess other)
         {

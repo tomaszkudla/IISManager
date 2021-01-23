@@ -6,10 +6,10 @@ using System.Linq;
 
 namespace IISManager.Implementations
 {
-    public sealed class ApplicationPoolsManager : IApplicationPoolsManager
+    public sealed class ApplicationPoolsManager
     {
         private static readonly ApplicationPoolsManager instance = new ApplicationPoolsManager();
-        private readonly ObservableList<ApplicationPool> applicationPools = new ObservableList<ApplicationPool>();
+        private readonly ApplicationPoolsList applicationPools = new ApplicationPoolsList();
 
         static ApplicationPoolsManager()
         {
@@ -30,7 +30,7 @@ namespace IISManager.Implementations
             }
         }
 
-        public ObservableList<ApplicationPool> ApplicationPools
+        public ApplicationPoolsList ApplicationPools
         {
             get
             {
@@ -44,36 +44,23 @@ namespace IISManager.Implementations
 
         public void Refresh()
         {
-            var selectedAppPools = new HashSet<string>(applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name));
             using (var serverManager = new ServerManager())
             {
                 WorkerProcessDiagnostics.Instance.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
-                var appPoolsRaw = serverManager.ApplicationPools.Select(p => new ApplicationPool(p)
-                {
-                    IsSelected = selectedAppPools.Contains(p.Name)
-                });
-
+                var appPoolsRaw = serverManager.ApplicationPools.Select(p => new ApplicationPool(p));
                 applicationPools.Value = appPoolsRaw.FilterAppPools(Filter.Value).OrderAppPoolsBy(Sorting.Value);
             }
         }
 
         public void Select(string name)
         {
-            var appPool = applicationPools.Value.FirstOrDefault(p => p.Name == name);
-            if (appPool != null)
-            {
-                appPool.IsSelected = true;
-            }
+            applicationPools.SelectedApplicationPools.Add(name);
         }
 
         public void Unselect(string name)
         {
-            var appPool = applicationPools.Value.FirstOrDefault(p => p.Name == name);
-            if (appPool != null)
-            {
-                appPool.IsSelected = false;
-                AllSelected.Value = false;
-            }
+            applicationPools.SelectedApplicationPools.Remove(name);
+            AllSelected.Value = false;
         }
 
         public void SelectAll()

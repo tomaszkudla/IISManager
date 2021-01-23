@@ -15,7 +15,7 @@ namespace IISManagerUI
 
         private void MainWindow_LocationChanged(object sender, System.EventArgs e)
         {
-            RefreshingTimer.Instance.PauseForNextTick();
+            //RefreshingTimer.Instance.PauseForNextTick();
         }
 
     }

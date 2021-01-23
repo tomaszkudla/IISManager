@@ -2,17 +2,18 @@
 using Microsoft.Web.Administration;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace IISManager.Implementations
 {
-    public class ApplicationPool : IApplicationPool, IEquatable<ApplicationPool>
+    public class ApplicationPool : IEquatable<ApplicationPool>, INotifyPropertyChanged
     {
-        private readonly ObservableList<WorkerProcess> workerProcesses = new ObservableList<WorkerProcess>();
         private readonly Microsoft.Web.Administration.ApplicationPool applicationPool;
-        private readonly string name;
-        private readonly ApplicationPoolState state;
-        private readonly WorkerProcessDiagnostics cpuUsageCounters;
+        private string name;
+        private ApplicationPoolState state;
+        private bool isSelected;
+        private WorkerProcessDiagnostics cpuUsageCounters;
 
         public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool)
         {
@@ -20,15 +21,51 @@ namespace IISManager.Implementations
             name = applicationPool.Name;
             state = (ApplicationPoolState)(int)applicationPool.State;
             cpuUsageCounters = WorkerProcessDiagnostics.Instance;
-            workerProcesses.Value = GetWorkerProcesses(applicationPool);
+            WorkerProcesses.Value = GetWorkerProcesses(applicationPool);
         }
 
-        public string Name { get => name; }
-        public ApplicationPoolState State { get => state; }
+        public string Name 
+        { 
+            get { return name; } 
+            set
+            {
+                if (this.name != value)
+                {
+                    this.name = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs("Name"));
+                }
+            }
+        }
 
-        public ObservableList<WorkerProcess> WorkerProcesses => workerProcesses;
+        public ApplicationPoolState State
+        {
+            get { return state; }
+            set
+            {
+                if (this.state != value)
+                {
+                    this.state = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs("State"));
+                }
+            }
+        }
 
-        public bool IsSelected { get; set; }
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                if (this.IsSelected != value)
+                {
+                    this.isSelected = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs("IsSelected"));
+                }
+            }
+        }
+
+        public WorkerProcessesList WorkerProcesses { get; set; } = new WorkerProcessesList();
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public bool Equals(ApplicationPool other)
         {

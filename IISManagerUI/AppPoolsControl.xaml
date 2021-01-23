@@ -120,7 +120,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <CheckBox Grid.Column="0" Margin="3,1,1,1" IsChecked="{Binding IsSelected}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Tag="{Binding Name, Mode=OneWay}"/>
+                        <CheckBox Grid.Column="0" Margin="3,1,1,1" IsChecked="{Binding IsSelected, Mode=OneWay}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Tag="{Binding Name, Mode=OneWay}"/>
                         <TextBox Grid.Column="1" Text="{Binding Name, Mode=OneWay}" />
                         <TextBox Grid.Column="2" Text="{Binding State, Mode=OneWay}" HorizontalAlignment="Right" Style="{StaticResource AppPoolState}" />
                     </Grid>
@@ -149,8 +149,8 @@
                                         <TextBox Grid.Column="3" Text="{Binding Id, Mode=OneWay}" Style="{StaticResource DarkTextBox}"/>
                                         <Label Grid.Column="4" MouseDown="KillProcess_Click" Tag="{Binding Id, Mode=OneWay}" Content="❌" Style="{StaticResource RedHover}" ToolTip="Kill the process" />
                                         <TextBox Grid.Column="5" Text="{Binding State, Mode=OneWay}" Style="{StaticResource WorkerProcessState}"/>
-                                        <TextBox Grid.Column="6" Text="{Binding WorkerProcessDiagnosticValues.CpuUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource CpuUsage}" />
-                                        <TextBox Grid.Column="7" Text="{Binding WorkerProcessDiagnosticValues.MemoryUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource MemoryUsage}" />
+                                        <!--<TextBox Grid.Column="6" Text="{Binding WorkerProcessDiagnosticValues.CpuUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource CpuUsage}" />
+                                        <TextBox Grid.Column="7" Text="{Binding WorkerProcessDiagnosticValues.MemoryUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource MemoryUsage}" />-->
                                     </Grid>
                                 </Grid>
                             </DataTemplate>
