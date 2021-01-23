@@ -30,10 +30,13 @@ namespace IISManager.Implementations
 				{
                     for (int i = 0; i < value.Count; i++)
                     {
-						this.value[i].Name = value[i].Name;
-						this.value[i].IsSelected = SelectedApplicationPools.Contains(value[i].Name);
-						this.value[i].State = value[i].State;
-						this.value[i].WorkerProcesses.Value = value[i].WorkerProcesses.Value;
+						var currentValue = this.value[i];
+						var newValue = value[i];
+
+						currentValue.Name = newValue.Name;
+						currentValue.IsSelected = SelectedApplicationPools.Contains(newValue.Name);
+						currentValue.State = newValue.State;
+						currentValue.WorkerProcesses.Value = newValue.WorkerProcesses.Value;
 					}
 				}
 				else

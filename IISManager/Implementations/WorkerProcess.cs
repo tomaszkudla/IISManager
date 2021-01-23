@@ -6,17 +6,18 @@ namespace IISManager.Implementations
 {
     public class WorkerProcess : IEquatable<WorkerProcess>, INotifyPropertyChanged
     {
-        private readonly Microsoft.Web.Administration.WorkerProcess workerProcess;
         private int id;
+        private string cpuUsage;
+        private string memoryUsage;
         private WorkerProcessState state;
-        private readonly WorkerProcessDiagnosticValues workerProcessDiagnostics;
 
         public WorkerProcess(Microsoft.Web.Administration.WorkerProcess workerProcess, WorkerProcessDiagnosticValues workerProcessDiagnostics)
         {
-            this.workerProcess = workerProcess;
             id = workerProcess.ProcessId;
             state = (WorkerProcessState)(int)workerProcess.State;
-            this.workerProcessDiagnostics = workerProcessDiagnostics;
+            cpuUsage = workerProcessDiagnostics.CpuUsage.ToString();
+            memoryUsage = workerProcessDiagnostics.MemoryUsage.ToString();
+            WorkerProcessDiagnostics = workerProcessDiagnostics;
         }
 
         public int Id
@@ -45,7 +46,33 @@ namespace IISManager.Implementations
             }
         }
 
-        public WorkerProcessDiagnosticValues WorkerProcessDiagnosticValues { get => workerProcessDiagnostics; }
+        public string CpuUsage
+        {
+            get { return cpuUsage; }
+            set
+            {
+                if (this.cpuUsage != value)
+                {
+                    this.cpuUsage = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs("CpuUsage"));
+                }
+            }
+        }
+
+        public string MemoryUsage
+        {
+            get { return memoryUsage; }
+            set
+            {
+                if (this.memoryUsage != value)
+                {
+                    this.memoryUsage = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs("MemoryUsage"));
+                }
+            }
+        }
+
+        public WorkerProcessDiagnosticValues WorkerProcessDiagnostics { get; }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -53,7 +80,8 @@ namespace IISManager.Implementations
         {
             return this.Id == other.Id &&
                 this.State == other.State &&
-                this.workerProcessDiagnostics == other.workerProcessDiagnostics;
+                this.CpuUsage == other.CpuUsage &&
+                this.MemoryUsage == other.MemoryUsage;
         }
     }
 }

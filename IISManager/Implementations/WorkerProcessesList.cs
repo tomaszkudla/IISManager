@@ -26,8 +26,13 @@ namespace IISManager.Implementations
 				{
                     for (int i = 0; i < value.Count; i++)
                     {
-						this.value[i].Id = value[i].Id;
-						this.value[i].State = value[i].State;
+						var currentValue = this.value[i];
+						var newValue = value[i];
+
+						currentValue.Id = newValue.Id;
+						currentValue.State = newValue.State;
+						currentValue.CpuUsage = newValue.CpuUsage;
+						currentValue.MemoryUsage = newValue.MemoryUsage;
 					}
 				}
 				else

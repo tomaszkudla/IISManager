@@ -58,20 +58,20 @@
         </Style>
         <Style TargetType="TextBox" BasedOn="{StaticResource DarkTextBox}" x:Key="CpuUsage">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.CpuUsage.Value, Converter={StaticResource cpuUsageConverter}}" Value="Medium">
+                <DataTrigger Binding="{Binding CpuUsage, Converter={StaticResource cpuUsageConverter}}" Value="Medium">
                     <Setter Property="Foreground" Value="Yellow" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.CpuUsage.Value, Converter={StaticResource cpuUsageConverter}}" Value="High">
+                <DataTrigger Binding="{Binding CpuUsage, Converter={StaticResource cpuUsageConverter}}" Value="High">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style TargetType="TextBox" BasedOn="{StaticResource DarkTextBox}" x:Key="MemoryUsage">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.MemoryUsage.Value, Converter={StaticResource memoryUsageConverter}}" Value="Medium">
+                <DataTrigger Binding="{Binding MemoryUsage, Converter={StaticResource memoryUsageConverter}}" Value="Medium">
                     <Setter Property="Foreground" Value="Yellow" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding WorkerProcessDiagnosticValues.MemoryUsage.Value, Converter={StaticResource memoryUsageConverter}}" Value="High">
+                <DataTrigger Binding="{Binding MemoryUsage, Converter={StaticResource memoryUsageConverter}}" Value="High">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
             </Style.Triggers>
@@ -149,8 +149,8 @@
                                         <TextBox Grid.Column="3" Text="{Binding Id, Mode=OneWay}" Style="{StaticResource DarkTextBox}"/>
                                         <Label Grid.Column="4" MouseDown="KillProcess_Click" Tag="{Binding Id, Mode=OneWay}" Content="❌" Style="{StaticResource RedHover}" ToolTip="Kill the process" />
                                         <TextBox Grid.Column="5" Text="{Binding State, Mode=OneWay}" Style="{StaticResource WorkerProcessState}"/>
-                                        <!--<TextBox Grid.Column="6" Text="{Binding WorkerProcessDiagnosticValues.CpuUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource CpuUsage}" />
-                                        <TextBox Grid.Column="7" Text="{Binding WorkerProcessDiagnosticValues.MemoryUsage.ValueFormatted, Mode=OneWay}" Style="{StaticResource MemoryUsage}" />-->
+                                        <TextBox Grid.Column="6" Text="{Binding CpuUsage, Mode=OneWay}" Style="{StaticResource CpuUsage}" />
+                                        <TextBox Grid.Column="7" Text="{Binding MemoryUsage, Mode=OneWay}" Style="{StaticResource MemoryUsage}" />
                                     </Grid>
                                 </Grid>
                             </DataTemplate>

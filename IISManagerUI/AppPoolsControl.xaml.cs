@@ -29,12 +29,23 @@ namespace IISManagerUI
         {
             InitializeComponent();
             var cpuUsageConverter = Resources["cpuUsageConverter"] as ThresholdConverter;
+            cpuUsageConverter.Unit = "%";
             cpuUsageConverter.MediumThreshold = Configuration.CpuUsageMediumThreshold;
             cpuUsageConverter.HighThreshold = Configuration.CpuUsageHighThreshold;
             var memoryUsageConverter = Resources["memoryUsageConverter"] as ThresholdConverter;
-            var totalMemory = Utils.GetTotalMemory() ?? 16384.0;
-            memoryUsageConverter.MediumThreshold = Configuration.MemoryUsageMediumThreshold * totalMemory / 100.0;
-            memoryUsageConverter.HighThreshold = Configuration.MemoryUsageHighThreshold * totalMemory / 100.0;
+            memoryUsageConverter.Unit = "MB";
+            var totalMemory = Utils.GetTotalMemory();
+            if (totalMemory == null)
+            {
+                memoryUsageConverter.MediumThreshold = double.MaxValue;
+                memoryUsageConverter.HighThreshold = double.MaxValue;
+            }
+            else
+            {
+                memoryUsageConverter.MediumThreshold = Configuration.MemoryUsageMediumThreshold * totalMemory.Value / 100.0;
+                memoryUsageConverter.HighThreshold = Configuration.MemoryUsageHighThreshold * totalMemory.Value / 100.0;
+            }
+
             manager = ApplicationPoolsManager.Instance;
             timer = RefreshingTimer.Instance;
             timer.Tick += Timer_Tick;
