@@ -4,7 +4,6 @@ namespace IISManager.Interfaces
 {
     public interface IApplicationPoolsManager
     {
-        ObservableList<ApplicationPool> ApplicationPools { get; }
         Observable<bool> AllSelected { get; }
         Observable<SortingType> Sorting { get; }
         Observable<string> Filter { get; }

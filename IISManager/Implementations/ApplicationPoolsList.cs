@@ -8,6 +8,7 @@ namespace IISManager.Implementations
     public class ApplicationPoolsList : INotifyPropertyChanged
 	{
 		private List<ApplicationPool> value;
+		private HashSet<string> selectedApplicationPools = new HashSet<string>();
 
 		public ApplicationPoolsList()
 		{
@@ -19,7 +20,19 @@ namespace IISManager.Implementations
 			this.value = value;
 		}
 
-		public HashSet<string> SelectedApplicationPools { get; } = new HashSet<string>();
+		public HashSet<string> SelectedApplicationPools
+        {
+			get { return selectedApplicationPools; }
+			set
+            {
+				selectedApplicationPools = value;
+				for (int i = 0; i < this.value.Count; i++)
+				{
+					var currentValue = this.value[i];
+					currentValue.IsSelected = selectedApplicationPools.Contains(currentValue.Name);
+				}
+			}
+        }
 
 		public List<ApplicationPool> Value
 		{

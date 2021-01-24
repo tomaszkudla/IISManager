@@ -65,16 +65,12 @@ namespace IISManager.Implementations
 
         public void SelectAll()
         {
-            var appPools = applicationPools.Value.ConvertAll(p => p.Clone());
-            appPools.ForEach(p => p.IsSelected = true);
-            applicationPools.Value = appPools;
+            applicationPools.SelectedApplicationPools = new HashSet<string>(applicationPools.Value.Select(p => p.Name));
         }
 
         public void UnselectAll()
         {
-            var appPools = applicationPools.Value.ConvertAll(p => p.Clone());
-            appPools.ForEach(p => p.IsSelected = false);
-            applicationPools.Value = appPools;
+            applicationPools.SelectedApplicationPools = new HashSet<string>();
         }
 
         public void StartSelected()
