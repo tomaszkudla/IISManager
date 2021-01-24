@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace IISManager.Implementations
+namespace IISManager.ViewModels
 {
     public class WorkerProcessesList : INotifyPropertyChanged
 	{

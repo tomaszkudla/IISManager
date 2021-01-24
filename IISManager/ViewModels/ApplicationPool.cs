@@ -1,9 +1,10 @@
-﻿using Microsoft.Web.Administration;
+﻿using IISManager.Implementations;
+using Microsoft.Web.Administration;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace IISManager.Implementations
+namespace IISManager.ViewModels
 {
     public class ApplicationPool : INotifyPropertyChanged
     {

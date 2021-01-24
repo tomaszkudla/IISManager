@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace IISManager.Implementations
+namespace IISManager.Utils
 {
     public static class ProcessUtils
     {

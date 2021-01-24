@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace IISManager.Implementations
+namespace IISManager.Utils
 {
 	public class Observable<T> : INotifyPropertyChanged
 	{

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace IISManager.Implementations
+﻿namespace IISManager.Implementations
 {
     public class DiagnosticValue
     {

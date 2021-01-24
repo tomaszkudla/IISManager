@@ -1,4 +1,4 @@
-﻿namespace IISManager.Implementations
+﻿namespace IISManager.ViewModels
 {
     public enum SortingType
     {

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using IISManager.Implementations;
 using System.ComponentModel;
 
-namespace IISManager.Implementations
+namespace IISManager.ViewModels
 {
     public class WorkerProcess : INotifyPropertyChanged
     {

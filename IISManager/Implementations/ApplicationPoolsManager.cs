@@ -1,4 +1,6 @@
-﻿using Microsoft.Web.Administration;
+﻿using IISManager.Utils;
+using IISManager.ViewModels;
+using Microsoft.Web.Administration;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,7 +43,7 @@ namespace IISManager.Implementations
             using (var serverManager = new ServerManager())
             {
                 WorkerProcessDiagnostics.Instance.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
-                applicationPools.Value = serverManager.ApplicationPools.Select(p => new ApplicationPool(p)).ToList();
+                applicationPools.Value = serverManager.ApplicationPools.Select(p => new ViewModels.ApplicationPool(p)).ToList();
             }
         }
 

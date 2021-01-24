@@ -1,8 +1,8 @@
-﻿using System;
+﻿using IISManager.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IISManager.Implementations
+namespace IISManager.Utils
 {
     public static class Extensions
     {

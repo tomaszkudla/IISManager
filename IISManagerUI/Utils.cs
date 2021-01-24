@@ -6,7 +6,7 @@ namespace IISManagerUI
 {
     public static class Utils
     {
-        static Lazy<double?> totalMemory = new Lazy<double?>(DoGetTotalMemory());
+        static readonly Lazy<double?> totalMemory = new Lazy<double?>(DoGetTotalMemory());
         public static void SafeExecute(Action action)
         {
             try

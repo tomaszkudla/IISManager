@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Caching;
 
-namespace IISManager.Implementations
+namespace IISManager.Utils
 {
     public class GenericMemoryCache<T> where T : class
     {
