@@ -76,7 +76,7 @@
         <Label Grid.Column="6" MouseDown="SortByState_Click" ToolTip="Sort by state" Content="⇵▶️■" Style="{StaticResource BlueHover}" FontSize="14" Padding="2,2,4,2"/>
         <Label Grid.Column="7" MouseDown="SortByCpuUsage_Click" ToolTip="Sort by CPU usage" Content="⇵%" Style="{StaticResource BlueHover}" FontSize="14" Padding="2,2,4,2"/>
         <Label Grid.Column="9" Content="⌕" />
-        <TextBox Grid.Column="10" Name="searchTextBox"  Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Column="10" Name="searchTextBox"  Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Grid.Column="11" MouseDown="ClearFilter_Click" ToolTip="Clear filter" Content="🞩" Style="{StaticResource BlueHover}" FontSize="14" />
         <Label Grid.Column="13" Content="IIS" />
         <Label Grid.Column="14" MouseDown="StartIIS_Click" ToolTip="Start IIS" Content="▶️" Style="{StaticResource GreenHover}" />

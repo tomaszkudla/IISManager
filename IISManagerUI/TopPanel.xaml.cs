@@ -28,7 +28,7 @@ namespace IISManagerUI
             manager = ApplicationPoolsManager.Instance;
             iisServerManager = IISServerManager.Instance;
             selectAllCheckBox.DataContext = manager.AllSelected;
-            searchTextBox.DataContext = manager.Filter;
+            searchTextBox.DataContext = manager.ApplicationPools;
         }
 
         private void StartSelected_Click(object sender, RoutedEventArgs e)
@@ -97,43 +97,50 @@ namespace IISManagerUI
 
         private void SortByName_Click(object sender, RoutedEventArgs e)
         {
-            if (manager.Sorting.Value != SortingType.ByNameAsc)
+            if (manager.ApplicationPools.Sorting != SortingType.ByNameAsc)
             {
-                manager.Sorting.Value = SortingType.ByNameAsc;
+                manager.ApplicationPools.Sorting = SortingType.ByNameAsc;
             }
             else
             {
-                manager.Sorting.Value = SortingType.ByNameDsc;
+                manager.ApplicationPools.Sorting = SortingType.ByNameDsc;
             }
+
+            manager.Refresh();
         }
 
         private void SortByState_Click(object sender, RoutedEventArgs e)
         {
-            if (manager.Sorting.Value != SortingType.ByStateAsc)
+            if (manager.ApplicationPools.Sorting != SortingType.ByStateAsc)
             {
-                manager.Sorting.Value = SortingType.ByStateAsc;
+                manager.ApplicationPools.Sorting = SortingType.ByStateAsc;
             }
             else
             {
-                manager.Sorting.Value = SortingType.ByStateDsc;
+                manager.ApplicationPools.Sorting = SortingType.ByStateDsc;
             }
+
+            manager.Refresh();
         }
 
         private void SortByCpuUsage_Click(object sender, RoutedEventArgs e)
         {
-            if (manager.Sorting.Value != SortingType.ByCpuUsageDsc)
+            if (manager.ApplicationPools.Sorting != SortingType.ByCpuUsageDsc)
             {
-                manager.Sorting.Value = SortingType.ByCpuUsageDsc;
+                manager.ApplicationPools.Sorting = SortingType.ByCpuUsageDsc;
             }
             else
             {
-                manager.Sorting.Value = SortingType.ByCpuUsageAsc;
+                manager.ApplicationPools.Sorting = SortingType.ByCpuUsageAsc;
             }
+
+            manager.Refresh();
         }
 
         private void ClearFilter_Click(object sender, RoutedEventArgs e)
         {
-            manager.Filter.Value = string.Empty;
+            manager.ApplicationPools.Filter = string.Empty;
+            manager.Refresh();
         }
     }
 }

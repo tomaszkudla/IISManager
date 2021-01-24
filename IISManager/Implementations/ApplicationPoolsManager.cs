@@ -17,8 +17,8 @@ namespace IISManager.Implementations
 
         private ApplicationPoolsManager()
         {
-            Sorting.PropertyChanged += RefreshFiltering;
-            Filter.PropertyChanged += RefreshFiltering;
+            //Sorting.PropertyChanged += RefreshFiltering;
+            //Filter.PropertyChanged += RefreshFiltering;
             Refresh();
         }
 
@@ -39,16 +39,13 @@ namespace IISManager.Implementations
         }
 
         public Observable<bool> AllSelected { get; } = new Observable<bool>();
-        public Observable<SortingType> Sorting { get; } = new Observable<SortingType>(SortingType.ByNameAsc);
-        public Observable<string> Filter { get; } = new Observable<string>(string.Empty);
 
         public void Refresh()
         {
             using (var serverManager = new ServerManager())
             {
                 WorkerProcessDiagnostics.Instance.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
-                var appPoolsRaw = serverManager.ApplicationPools.Select(p => new ApplicationPool(p));
-                applicationPools.Value = appPoolsRaw.FilterAppPools(Filter.Value).OrderAppPoolsBy(Sorting.Value);
+                applicationPools.Value = serverManager.ApplicationPools.Select(p => new ApplicationPool(p)).ToList();
             }
         }
 
@@ -75,34 +72,53 @@ namespace IISManager.Implementations
 
         public void StartSelected()
         {
-            var selected = applicationPools.Value.Where(p => p.IsSelected);
-            foreach (var appPool in selected)
+            var selectedPoolNames = applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name);
+            using (var serverManager = new ServerManager())
             {
-                appPool.Start();
+                var allPools = serverManager.ApplicationPools;
+                var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
+                foreach (var appPool in selectedPools)
+                {
+                    if (appPool.State != ObjectState.Started)
+                    {
+                        appPool.Start();
+                    }
+                }
             }
         }
 
         public void StopSelected()
         {
-            var selected = applicationPools.Value.Where(p => p.IsSelected);
-            foreach (var appPool in selected)
+            var selectedPoolNames = applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name);
+            using (var serverManager = new ServerManager())
             {
-                appPool.Stop();
+                var allPools = serverManager.ApplicationPools;
+                var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
+                foreach (var appPool in selectedPools)
+                {
+                    if (appPool.State != ObjectState.Stopped)
+                    {
+                        appPool.Stop();
+                    }
+                }
             }
         }
 
         public void RecycleSelected()
         {
-            var selected = applicationPools.Value.Where(p => p.IsSelected);
-            foreach (var appPool in selected)
+            var selectedPoolNames = applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name);
+            using (var serverManager = new ServerManager())
             {
-                appPool.Recycle();
+                var allPools = serverManager.ApplicationPools;
+                var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
+                foreach (var appPool in selectedPools)
+                {
+                    if (appPool.State != ObjectState.Stopped)
+                    {
+                        appPool.Recycle();
+                    }
+                }
             }
-        }
-        
-        private void RefreshFiltering(object sender, PropertyChangedEventArgs e)
-        {
-            ApplicationPools.Value = ApplicationPools.Value.FilterAppPools(Filter.Value).OrderAppPoolsBy(Sorting.Value);
         }
     }
 }
