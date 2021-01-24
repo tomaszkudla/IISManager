@@ -1,10 +1,9 @@
-﻿using IISManager.Interfaces;
-using System;
+﻿using System;
 using System.ComponentModel;
 
 namespace IISManager.Implementations
 {
-    public class WorkerProcess : IEquatable<WorkerProcess>, INotifyPropertyChanged
+    public class WorkerProcess : INotifyPropertyChanged
     {
         private int id;
         private string cpuUsage;
@@ -75,13 +74,5 @@ namespace IISManager.Implementations
         public WorkerProcessDiagnosticValues WorkerProcessDiagnostics { get; }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
-        public bool Equals(WorkerProcess other)
-        {
-            return this.Id == other.Id &&
-                this.State == other.State &&
-                this.CpuUsage == other.CpuUsage &&
-                this.MemoryUsage == other.MemoryUsage;
-        }
     }
 }

@@ -10,4 +10,8 @@
     <PackageReference Include="System.Runtime.Caching" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 </Project>

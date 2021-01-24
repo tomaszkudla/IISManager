@@ -2,7 +2,7 @@
 
 namespace IISManager.Implementations
 {
-    public class DiagnosticValue : IEquatable<DiagnosticValue>
+    public class DiagnosticValue
     {
         public DiagnosticValue(double value, string stringPattern)
         {
@@ -16,11 +16,6 @@ namespace IISManager.Implementations
         public override string ToString()
         {
             return ValueFormatted;
-        }
-
-        public bool Equals(DiagnosticValue other)
-        {
-            return Math.Abs(this.Value - other.Value) < 0.01;
         }
     }
 }

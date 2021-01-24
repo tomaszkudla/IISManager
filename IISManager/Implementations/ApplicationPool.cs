@@ -1,19 +1,17 @@
-﻿using IISManager.Interfaces;
-using Microsoft.Web.Administration;
-using System;
+﻿using Microsoft.Web.Administration;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
 namespace IISManager.Implementations
 {
-    public class ApplicationPool : IEquatable<ApplicationPool>, INotifyPropertyChanged
+    public class ApplicationPool : INotifyPropertyChanged
     {
         private readonly Microsoft.Web.Administration.ApplicationPool applicationPool;
         private string name;
         private ApplicationPoolState state;
         private bool isSelected;
-        private WorkerProcessDiagnostics cpuUsageCounters;
+        private readonly WorkerProcessDiagnostics cpuUsageCounters;
 
         public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool)
         {
@@ -67,14 +65,6 @@ namespace IISManager.Implementations
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        public bool Equals(ApplicationPool other)
-        {
-            return this.Name == other.Name &&
-                this.State == other.State &&
-                this.IsSelected == other.IsSelected &&
-                Enumerable.SequenceEqual(this.WorkerProcesses.Value, other.WorkerProcesses.Value);
-        }
-
         public void Recycle()
         {
             if (applicationPool.State != ObjectState.Stopped)
@@ -97,14 +87,6 @@ namespace IISManager.Implementations
             {
                 applicationPool.Stop();
             }
-        }
-
-        public ApplicationPool Clone()
-        {
-            return new ApplicationPool(applicationPool)
-            {
-                IsSelected = this.IsSelected
-            };
         }
 
         private List<WorkerProcess> GetWorkerProcesses(Microsoft.Web.Administration.ApplicationPool applicationPool)

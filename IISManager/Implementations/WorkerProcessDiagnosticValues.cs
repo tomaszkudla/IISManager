@@ -2,7 +2,7 @@
 
 namespace IISManager.Implementations
 {
-    public class WorkerProcessDiagnosticValues : IEquatable<WorkerProcessDiagnosticValues>
+    public class WorkerProcessDiagnosticValues
     {
         public WorkerProcessDiagnosticValues(double cpuUsage, double memoryUsage)
         {
@@ -12,11 +12,5 @@ namespace IISManager.Implementations
 
         public DiagnosticValue CpuUsage { get; }
         public DiagnosticValue MemoryUsage { get; }
-
-        public bool Equals(WorkerProcessDiagnosticValues other)
-        {
-            return this.CpuUsage == other.CpuUsage &&
-                this.MemoryUsage == other.MemoryUsage;
-        }
     }
 }
