@@ -5,12 +5,14 @@ namespace IISManager.ViewModels
     public class Application : INotifyPropertyChanged
     {
         private string applicationPoolName;
+        private string path;
         private string dirPath;
         private string webPath;
 
-        public Application(string applicationPoolName, string dirPath, string webPath)
+        public Application(string applicationPoolName, string path, string dirPath, string webPath)
         {
             this.applicationPoolName = applicationPoolName;
+            this.path = path;
             this.dirPath = dirPath;
             this.webPath = webPath;
         }
@@ -24,6 +26,19 @@ namespace IISManager.ViewModels
                 {
                     this.applicationPoolName = value;
                     PropertyChanged(this, new PropertyChangedEventArgs("ApplicationPoolName"));
+                }
+            }
+        }
+
+        public string Path
+        {
+            get { return path; }
+            set
+            {
+                if (this.path != value)
+                {
+                    this.path = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs("Path"));
                 }
             }
         }

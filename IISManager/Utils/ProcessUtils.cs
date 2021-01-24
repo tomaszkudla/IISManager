@@ -8,5 +8,10 @@ namespace IISManager.Utils
         {
             Process.GetProcessById(processId).Kill();
         }
+
+        public static void GoToPath(string path)
+        {
+            Process.Start(new ProcessStartInfo("explorer", path) { CreateNoWindow = true });
+        }
     }
 }

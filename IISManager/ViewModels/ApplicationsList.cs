@@ -26,6 +26,7 @@ namespace IISManager.ViewModels
                         var newValue = value[i];
 
                         currentValue.ApplicationPoolName = newValue.ApplicationPoolName;
+                        currentValue.Path = newValue.Path;
                         currentValue.DirPath = newValue.DirPath;
                         currentValue.WebPath = newValue.WebPath;
                     }

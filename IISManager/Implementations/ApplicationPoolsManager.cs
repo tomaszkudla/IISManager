@@ -131,9 +131,10 @@ namespace IISManager.Implementations
                 foreach (var application in site.Applications)
                 {
                     var applicationPoolName = application.ApplicationPoolName;
+                    var applicationPath = application.Path;
                     var dirPath = application.VirtualDirectories["/"].PhysicalPath;
-                    var webPath = rootWebPath + application.Path;
-                    applicationList.Add(new ViewModels.Application(applicationPoolName, dirPath, webPath));
+                    var webPath = rootWebPath + applicationPath;
+                    applicationList.Add(new ViewModels.Application(applicationPoolName, applicationPath, dirPath, webPath));
                 }
             }
 
