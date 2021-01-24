@@ -1,4 +1,4 @@
-﻿namespace IISManager.Implementations
+﻿namespace IISManager.ViewModels
 {
     public enum SortingType
     {
@@ -7,5 +7,7 @@
         ByNameDsc,
         ByStateAsc,
         ByStateDsc,
+        ByCpuUsageAsc,
+        ByCpuUsageDsc,
     }
 }

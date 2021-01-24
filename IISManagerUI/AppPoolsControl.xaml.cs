@@ -1,7 +1,11 @@
 ﻿using IISManager.Implementations;
+using IISManager.Utils;
+using IISManager.ViewModels;
+using IISManagerUI.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -26,6 +30,24 @@ namespace IISManagerUI
         public AppPoolsControl()
         {
             InitializeComponent();
+            var cpuUsageConverter = Resources["cpuUsageConverter"] as ThresholdConverter;
+            cpuUsageConverter.Unit = "%";
+            cpuUsageConverter.MediumThreshold = Configuration.CpuUsageMediumThreshold;
+            cpuUsageConverter.HighThreshold = Configuration.CpuUsageHighThreshold;
+            var memoryUsageConverter = Resources["memoryUsageConverter"] as ThresholdConverter;
+            memoryUsageConverter.Unit = "MB";
+            var totalMemory = Utils.GetTotalMemory();
+            if (totalMemory == null)
+            {
+                memoryUsageConverter.MediumThreshold = double.MaxValue;
+                memoryUsageConverter.HighThreshold = double.MaxValue;
+            }
+            else
+            {
+                memoryUsageConverter.MediumThreshold = Configuration.MemoryUsageMediumThreshold * totalMemory.Value / 100.0;
+                memoryUsageConverter.HighThreshold = Configuration.MemoryUsageHighThreshold * totalMemory.Value / 100.0;
+            }
+
             manager = ApplicationPoolsManager.Instance;
             timer = RefreshingTimer.Instance;
             timer.Tick += Timer_Tick;
@@ -34,9 +56,12 @@ namespace IISManagerUI
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            Utils.SafeExecute(() =>
-            {
-                manager.Refresh();
+            Task.Run(() => 
+            { 
+                Utils.SafeExecute(() =>
+                {
+                    manager.Refresh();
+                });
             });
         }
 
@@ -99,6 +124,16 @@ namespace IISManagerUI
                 var checkBox = sender as CheckBox;
                 var appPoolName = checkBox.Tag.ToString();
                 manager.Unselect(appPoolName);
+            });
+        }
+
+        private void KillProcess_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.SafeExecute(() =>
+            {
+                var button = sender as Label;
+                var id = int.Parse(button.Tag.ToString());
+                ProcessUtils.KillProcess(id);
             });
         }
     }

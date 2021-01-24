@@ -7,6 +7,7 @@ namespace IISManagerUI
     {
         private static readonly RefreshingTimer instance = new RefreshingTimer();
         private readonly DispatcherTimer timer = new DispatcherTimer();
+        private bool isPaused;
 
         static RefreshingTimer()
         {
@@ -25,11 +26,23 @@ namespace IISManagerUI
             }
         }
 
+        public void PauseForNextTick()
+        {
+            isPaused = true;
+        }
+
         public EventHandler Tick { get; set; }
 
         private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
-            Tick?.Invoke(sender, e);
+            if (isPaused)
+            {
+                isPaused = false;
+            }
+            else
+            {
+                Tick?.Invoke(sender, e);
+            }
         }
 
         private void SetupTimer()

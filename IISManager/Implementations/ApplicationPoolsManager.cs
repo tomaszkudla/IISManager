@@ -1,15 +1,15 @@
-﻿using IISManager.Interfaces;
+﻿using IISManager.Utils;
+using IISManager.ViewModels;
 using Microsoft.Web.Administration;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 
 namespace IISManager.Implementations
 {
-    public sealed class ApplicationPoolsManager : IApplicationPoolsManager
+    public sealed class ApplicationPoolsManager
     {
         private static readonly ApplicationPoolsManager instance = new ApplicationPoolsManager();
-        private readonly ObservableList<ApplicationPool> applicationPools = new ObservableList<ApplicationPool>();
+        private readonly ApplicationPoolsList applicationPools = new ApplicationPoolsList();
 
         static ApplicationPoolsManager()
         {
@@ -17,8 +17,6 @@ namespace IISManager.Implementations
 
         private ApplicationPoolsManager()
         {
-            Sorting.PropertyChanged += RefreshFiltering;
-            Filter.PropertyChanged += RefreshFiltering;
             Refresh();
         }
 
@@ -30,7 +28,7 @@ namespace IISManager.Implementations
             }
         }
 
-        public ObservableList<ApplicationPool> ApplicationPools
+        public ApplicationPoolsList ApplicationPools
         {
             get
             {
@@ -39,86 +37,86 @@ namespace IISManager.Implementations
         }
 
         public Observable<bool> AllSelected { get; } = new Observable<bool>();
-        public Observable<SortingType> Sorting { get; } = new Observable<SortingType>(SortingType.ByNameAsc);
-        public Observable<string> Filter { get; } = new Observable<string>(string.Empty);
 
         public void Refresh()
         {
-            var selectedAppPools = new HashSet<string>(applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name));
             using (var serverManager = new ServerManager())
             {
-                var appPoolsRaw = serverManager.ApplicationPools.Select(p => new ApplicationPool(p)
-                {
-                    IsSelected = selectedAppPools.Contains(p.Name)
-                });
-
-                applicationPools.Value = appPoolsRaw.FilterAppPools(Filter.Value).OrderAppPoolsBy(Sorting.Value);
+                WorkerProcessDiagnostics.Instance.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
+                applicationPools.Value = serverManager.ApplicationPools.Select(p => new ViewModels.ApplicationPool(p)).ToList();
             }
         }
 
         public void Select(string name)
         {
-            var appPool = applicationPools.Value.FirstOrDefault(p => p.Name == name);
-            if (appPool != null)
-            {
-                appPool.IsSelected = true;
-            }
+            applicationPools.SelectedApplicationPools.Add(name);
         }
 
         public void Unselect(string name)
         {
-            var appPool = applicationPools.Value.FirstOrDefault(p => p.Name == name);
-            if (appPool != null)
-            {
-                appPool.IsSelected = false;
-                AllSelected.Value = false;
-            }
+            applicationPools.SelectedApplicationPools.Remove(name);
+            AllSelected.Value = false;
         }
 
         public void SelectAll()
         {
-            var appPools = applicationPools.Value.ConvertAll(p => p.Clone());
-            appPools.ForEach(p => p.IsSelected = true);
-            applicationPools.Value = appPools;
+            applicationPools.SelectedApplicationPools = new HashSet<string>(applicationPools.Value.Select(p => p.Name));
         }
 
         public void UnselectAll()
         {
-            var appPools = applicationPools.Value.ConvertAll(p => p.Clone());
-            appPools.ForEach(p => p.IsSelected = false);
-            applicationPools.Value = appPools;
+            applicationPools.SelectedApplicationPools = new HashSet<string>();
         }
 
         public void StartSelected()
         {
-            var selected = applicationPools.Value.Where(p => p.IsSelected);
-            foreach (var appPool in selected)
+            var selectedPoolNames = applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name);
+            using (var serverManager = new ServerManager())
             {
-                appPool.Start();
+                var allPools = serverManager.ApplicationPools;
+                var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
+                foreach (var appPool in selectedPools)
+                {
+                    if (appPool.State != ObjectState.Started)
+                    {
+                        appPool.Start();
+                    }
+                }
             }
         }
 
         public void StopSelected()
         {
-            var selected = applicationPools.Value.Where(p => p.IsSelected);
-            foreach (var appPool in selected)
+            var selectedPoolNames = applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name);
+            using (var serverManager = new ServerManager())
             {
-                appPool.Stop();
+                var allPools = serverManager.ApplicationPools;
+                var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
+                foreach (var appPool in selectedPools)
+                {
+                    if (appPool.State != ObjectState.Stopped)
+                    {
+                        appPool.Stop();
+                    }
+                }
             }
         }
 
         public void RecycleSelected()
         {
-            var selected = applicationPools.Value.Where(p => p.IsSelected);
-            foreach (var appPool in selected)
+            var selectedPoolNames = applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name);
+            using (var serverManager = new ServerManager())
             {
-                appPool.Recycle();
+                var allPools = serverManager.ApplicationPools;
+                var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
+                foreach (var appPool in selectedPools)
+                {
+                    if (appPool.State != ObjectState.Stopped)
+                    {
+                        appPool.Recycle();
+                    }
+                }
             }
-        }
-        
-        private void RefreshFiltering(object sender, PropertyChangedEventArgs e)
-        {
-            ApplicationPools.Value = ApplicationPools.Value.FilterAppPools(Filter.Value).OrderAppPoolsBy(Sorting.Value);
         }
     }
 }

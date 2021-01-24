@@ -56,6 +56,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="5*" />
@@ -71,14 +72,15 @@
         <Label Grid.Column="1" MouseDown="StartSelected_Click" ToolTip="Start selected" Content="▶️" Style="{StaticResource GreenHover}" />
         <Label Grid.Column="2" MouseDown="StopSelected_Click" ToolTip="Stop selected" Content="■" Style="{StaticResource RedHover}" />
         <Label Grid.Column="3" MouseDown="RecycleSelected_Click" ToolTip="Recycle selected" Content="⭮" Style="{StaticResource GreenHover}" />
-        <Label Grid.Column="5" MouseDown="SortByName_Click" ToolTip="Sort by name" Content="⇵AZ" Style="{StaticResource BlueHover}" FontSize="14" />
-        <Label Grid.Column="6" MouseDown="SortByState_Click" ToolTip="Sort by state" Content="⇵▶️■" Style="{StaticResource BlueHover}" FontSize="14"/>
-        <Label Grid.Column="8" Content="⌕" />
-        <TextBox Grid.Column="9" Name="searchTextBox"  Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Grid.Column="10" MouseDown="ClearFilter_Click" ToolTip="Clear filter" Content="🞩" Style="{StaticResource BlueHover}" FontSize="14" />
-        <Label Grid.Column="12" Content="IIS" />
-        <Label Grid.Column="13" MouseDown="StartIIS_Click" ToolTip="Start IIS" Content="▶️" Style="{StaticResource GreenHover}" />
-        <Label Grid.Column="14" MouseDown="StopIIS_Click" ToolTip="Stop IIS" Content="■" Style="{StaticResource RedHover}" />
-        <Label Grid.Column="15" HorizontalAlignment="Left" FontSize="20" MouseDown="ResetIIS_Click" ToolTip="Reset IIS" Content="⭮" Style="{StaticResource GreenHover}" />
+        <Label Grid.Column="5" MouseDown="SortByName_Click" ToolTip="Sort by name" Content="⇵AZ" Style="{StaticResource BlueHover}" FontSize="14" Padding="2,2,4,2"/>
+        <Label Grid.Column="6" MouseDown="SortByState_Click" ToolTip="Sort by state" Content="⇵▶️■" Style="{StaticResource BlueHover}" FontSize="14" Padding="2,2,4,2"/>
+        <Label Grid.Column="7" MouseDown="SortByCpuUsage_Click" ToolTip="Sort by CPU usage" Content="⇵%" Style="{StaticResource BlueHover}" FontSize="14" Padding="2,2,4,2"/>
+        <Label Grid.Column="9" Content="⌕" />
+        <TextBox Grid.Column="10" Name="searchTextBox"  Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Column="11" MouseDown="ClearFilter_Click" ToolTip="Clear filter" Content="🞩" Style="{StaticResource BlueHover}" FontSize="14" />
+        <Label Grid.Column="13" Content="IIS" />
+        <Label Grid.Column="14" MouseDown="StartIIS_Click" ToolTip="Start IIS" Content="▶️" Style="{StaticResource GreenHover}" />
+        <Label Grid.Column="15" MouseDown="StopIIS_Click" ToolTip="Stop IIS" Content="■" Style="{StaticResource RedHover}" />
+        <Label Grid.Column="16" HorizontalAlignment="Left" FontSize="20" MouseDown="ResetIIS_Click" ToolTip="Reset IIS" Content="⭮" Style="{StaticResource GreenHover}" />
     </Grid>
 </UserControl>
