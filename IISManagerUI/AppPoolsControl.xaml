@@ -15,6 +15,11 @@
             <Setter Property="Fill" Value="#111111" />
             <Setter Property="Height" Value="1" />
         </Style>
+        <Style TargetType="Rectangle" x:Key="VerticalLine">
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="Fill" Value="#111111" />
+            <Setter Property="Width" Value="1" />
+        </Style>
         <Style TargetType="TextBox">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="#E6E6E6" />
@@ -127,6 +132,7 @@
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <ItemsControl Grid.Column="0" ItemsSource="{Binding WorkerProcesses.Value, Mode=OneWay}" Background="#FF252526">
@@ -161,7 +167,8 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <ItemsControl Grid.Column="1" ItemsSource="{Binding Applications.Value, Mode=OneWay}" Background="#FF252526">
+                        <Rectangle Grid.Column="1" Style="{StaticResource VerticalLine}" />
+                        <ItemsControl Grid.Column="2" ItemsSource="{Binding Applications.Value, Mode=OneWay}" Background="#FF252526">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -172,15 +179,18 @@
                                         <Rectangle Style="{StaticResource HorizontalLine}" />
                                         <Grid Grid.Row="1">
                                             <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="10" />
+                                                <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" Content="▸" Style="{StaticResource DarkLabel}"/>
-                                            <Label Grid.Column="1" MouseDown="GoToPath_Click" Tag="{Binding DirPath, Mode=OneWay}" Content="📂" Style="{StaticResource BlueHover}" ToolTip="Open directory" />
-                                            <Label Grid.Column="2" MouseDown="GoToPath_Click" Tag="{Binding WebPath, Mode=OneWay}" Content="🌍" Style="{StaticResource BlueHover}" ToolTip="Open website" />
-                                            <TextBox Grid.Column="3" Text="{Binding Path, Mode=OneWay}" Style="{StaticResource DarkTextBox}"/>
+                                            <Label Grid.Column="1" Content="▸" Style="{StaticResource DarkLabel}"/>
+                                            <Label Grid.Column="2" MouseDown="GoToPath_Click" Tag="{Binding DirPath, Mode=OneWay}" Content="📂" Style="{StaticResource BlueHover}" ToolTip="Open directory" />
+                                            <Label Grid.Column="3" MouseDown="GoToPath_Click" Tag="{Binding WebPath, Mode=OneWay}" Content="🌍" Style="{StaticResource BlueHover}" ToolTip="Open website" />
+                                            <Label Grid.Column="4" MouseDown="SendGetRequest_Click" Tag="{Binding WebPath, Mode=OneWay}" Content=" ᴳᴱᵀ " Style="{StaticResource BlueHover}" ToolTip="Send GET request" />
+                                            <TextBox Grid.Column="5" Text="{Binding Path, Mode=OneWay}" Style="{StaticResource DarkTextBox}"/>
                                         </Grid>
                                     </Grid>
                                 </DataTemplate>

@@ -145,5 +145,14 @@ namespace IISManagerUI
                 ProcessUtils.GoToPath(button.Tag.ToString());
             });
         }
+
+        private void SendGetRequest_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.SafeExecute(() =>
+            {
+                var button = sender as Label;
+                ProcessUtils.SendGetRequest(button.Tag.ToString());
+            });
+        }
     }
 }
