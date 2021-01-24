@@ -1,7 +1,6 @@
 ﻿using IISManager.Interfaces;
 using Microsoft.Web.Administration;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 
 namespace IISManager.Implementations
@@ -17,8 +16,6 @@ namespace IISManager.Implementations
 
         private ApplicationPoolsManager()
         {
-            //Sorting.PropertyChanged += RefreshFiltering;
-            //Filter.PropertyChanged += RefreshFiltering;
             Refresh();
         }
 
