@@ -14,13 +14,14 @@ namespace IISManager.ViewModels
         private bool isSelected;
         private readonly WorkerProcessDiagnostics cpuUsageCounters;
 
-        public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool)
+        public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool, List<Application> applications)
         {
             this.applicationPool = applicationPool;
             name = applicationPool.Name;
             state = (ApplicationPoolState)(int)applicationPool.State;
             cpuUsageCounters = WorkerProcessDiagnostics.Instance;
             WorkerProcesses.Value = GetWorkerProcesses(applicationPool);
+            Applications = new ApplicationsList(applications);
         }
 
         public string Name 
@@ -63,6 +64,8 @@ namespace IISManager.ViewModels
         }
 
         public WorkerProcessesList WorkerProcesses { get; set; } = new WorkerProcessesList();
+
+        public ApplicationsList Applications { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 

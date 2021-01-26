@@ -6,20 +6,10 @@ namespace IISManager.ViewModels
 {
     public class ApplicationPoolsList : INotifyPropertyChanged
     {
-        private List<ApplicationPool> value;
+        private List<ApplicationPool> value = new List<ApplicationPool>();
         private HashSet<string> selectedApplicationPools = new HashSet<string>();
         private string filter;
         private SortingType sorting;
-
-        public ApplicationPoolsList()
-        {
-            value = new List<ApplicationPool>();
-        }
-
-        public ApplicationPoolsList(List<ApplicationPool> value)
-        {
-            this.value = value;
-        }
 
         public HashSet<string> SelectedApplicationPools
         {
@@ -74,6 +64,7 @@ namespace IISManager.ViewModels
                         currentValue.IsSelected = SelectedApplicationPools.Contains(newValue.Name);
                         currentValue.State = newValue.State;
                         currentValue.WorkerProcesses.Value = newValue.WorkerProcesses.Value;
+                        currentValue.Applications.Value = newValue.Applications.Value;
                     }
                 }
                 else

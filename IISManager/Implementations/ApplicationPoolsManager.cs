@@ -2,6 +2,7 @@
 using IISManager.ViewModels;
 using Microsoft.Web.Administration;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace IISManager.Implementations
@@ -43,7 +44,8 @@ namespace IISManager.Implementations
             using (var serverManager = new ServerManager())
             {
                 WorkerProcessDiagnostics.Instance.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
-                applicationPools.Value = serverManager.ApplicationPools.Select(p => new ViewModels.ApplicationPool(p)).ToList();
+                var applications = GetApplications(serverManager.Sites);
+                applicationPools.Value = serverManager.ApplicationPools.Select(p => new ViewModels.ApplicationPool(p, applications.Where(a => a.ApplicationPoolName == p.Name).ToList())).ToList();
             }
         }
 
@@ -117,6 +119,26 @@ namespace IISManager.Implementations
                     }
                 }
             }
+        }
+
+        private List<ViewModels.Application> GetApplications(SiteCollection sites)
+        {
+            var applicationList = new List<ViewModels.Application>();
+            foreach (var site in sites)
+            {
+                var rootDirPath = site.Applications["/"].VirtualDirectories["/"].PhysicalPath;
+                var rootWebPath = "http://localhost:" + site.Bindings.FirstOrDefault(b => b.Protocol.ToLower() == "http").EndPoint.Port;
+                foreach (var application in site.Applications)
+                {
+                    var applicationPoolName = application.ApplicationPoolName;
+                    var applicationPath = application.Path;
+                    var dirPath = application.VirtualDirectories["/"].PhysicalPath;
+                    var webPath = rootWebPath + applicationPath;
+                    applicationList.Add(new ViewModels.Application(applicationPoolName, applicationPath, dirPath, webPath));
+                }
+            }
+
+            return applicationList;
         }
     }
 }

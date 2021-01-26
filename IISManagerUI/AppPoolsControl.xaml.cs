@@ -136,5 +136,23 @@ namespace IISManagerUI
                 ProcessUtils.KillProcess(id);
             });
         }
+
+        private void GoToPath_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.SafeExecute(() =>
+            {
+                var button = sender as Label;
+                ProcessUtils.GoToPath(button.Tag.ToString());
+            });
+        }
+
+        private void SendGetRequest_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.SafeExecute(() =>
+            {
+                var button = sender as Label;
+                ProcessUtils.SendGetRequest(button.Tag.ToString());
+            });
+        }
     }
 }
