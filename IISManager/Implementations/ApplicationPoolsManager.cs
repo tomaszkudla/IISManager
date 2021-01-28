@@ -2,31 +2,17 @@
 using IISManager.ViewModels;
 using Microsoft.Web.Administration;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace IISManager.Implementations
 {
     public sealed class ApplicationPoolsManager
     {
-        private static readonly ApplicationPoolsManager instance = new ApplicationPoolsManager();
         private readonly ApplicationPoolsList applicationPools = new ApplicationPoolsList();
 
-        static ApplicationPoolsManager()
-        {
-        }
-
-        private ApplicationPoolsManager()
+        public ApplicationPoolsManager()
         {
             Refresh();
-        }
-
-        public static ApplicationPoolsManager Instance
-        {
-            get
-            {
-                return instance;
-            }
         }
 
         public ApplicationPoolsList ApplicationPools

@@ -27,7 +27,7 @@ namespace IISManagerUI
         private readonly ApplicationPoolsManager manager;
         private readonly RefreshingTimer timer; 
 
-        public AppPoolsControl()
+        public AppPoolsControl(ApplicationPoolsManager manager, RefreshingTimer refreshingTimer)
         {
             InitializeComponent();
             var cpuUsageConverter = Resources["cpuUsageConverter"] as ThresholdConverter;
@@ -48,8 +48,8 @@ namespace IISManagerUI
                 memoryUsageConverter.HighThreshold = Configuration.MemoryUsageHighThreshold * totalMemory.Value / 100.0;
             }
 
-            manager = ApplicationPoolsManager.Instance;
-            timer = RefreshingTimer.Instance;
+            this.manager = manager;
+            this.timer = refreshingTimer;
             timer.Tick += Timer_Tick;
             applicationPoolsControl.DataContext = manager.ApplicationPools;
         }
