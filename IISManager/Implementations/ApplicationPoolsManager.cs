@@ -1,5 +1,6 @@
 ﻿using IISManager.Utils;
 using IISManager.ViewModels;
+using Microsoft.Extensions.Logging;
 using Microsoft.Web.Administration;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,12 @@ namespace IISManager.Implementations
 {
     public sealed class ApplicationPoolsManager
     {
+        private readonly ILogger<ApplicationPoolsManager> logger;
         private readonly ApplicationPoolsList applicationPools = new ApplicationPoolsList();
 
-        public ApplicationPoolsManager()
+        public ApplicationPoolsManager(ILoggerFactory loggerFactory)
         {
+            logger = loggerFactory.CreateLogger<ApplicationPoolsManager>();
             Refresh();
         }
 

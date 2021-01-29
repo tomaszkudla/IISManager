@@ -1,5 +1,7 @@
 ﻿using IISManager.Implementations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -31,6 +33,17 @@ namespace IISManagerUI
             services.AddSingleton<AppPoolsControl>();
             services.AddSingleton<TopPanel>();
             services.AddSingleton<MainWindow>();
+
+            var config = new NLog.Config.LoggingConfiguration();
+            var logfile = new NLog.Targets.FileTarget("logfile") { FileName = "log.txt" };
+            config.AddRule(NLog.LogLevel.Trace, NLog.LogLevel.Fatal, logfile);
+
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.ClearProviders();
+                loggingBuilder.SetMinimumLevel(LogLevel.Trace);
+                loggingBuilder.AddNLog(config);
+            });
         }
 
         private void OnStartup(object sender, StartupEventArgs e)
