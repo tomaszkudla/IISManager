@@ -1,15 +1,18 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IISManager.Implementations;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace IISManagerUnitTests
 {
     [TestClass]
     public class ApplicationPoolsManagerUnitTests
     {
+        private readonly WorkerProcessDiagnostics workerProcessDiagnostics;
         private readonly ApplicationPoolsManager manager;
         public ApplicationPoolsManagerUnitTests()
         {
-            manager = ApplicationPoolsManager.Instance;
+            workerProcessDiagnostics = new WorkerProcessDiagnostics(NullLoggerFactory.Instance);
+            manager = new ApplicationPoolsManager(NullLoggerFactory.Instance, workerProcessDiagnostics);
         }
 
         [TestMethod]

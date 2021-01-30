@@ -12,14 +12,14 @@ namespace IISManager.ViewModels
         private string name;
         private ApplicationPoolState state;
         private bool isSelected;
-        private readonly WorkerProcessDiagnostics cpuUsageCounters;
+        private readonly WorkerProcessDiagnostics workerProcessDiagnostics;
 
-        public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool, List<Application> applications)
+        public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool, List<Application> applications, WorkerProcessDiagnostics workerProcessDiagnostics)
         {
             this.applicationPool = applicationPool;
             name = applicationPool.Name;
             state = (ApplicationPoolState)(int)applicationPool.State;
-            cpuUsageCounters = WorkerProcessDiagnostics.Instance;
+            this.workerProcessDiagnostics = workerProcessDiagnostics;
             WorkerProcesses.Value = GetWorkerProcesses(applicationPool);
             Applications = new ApplicationsList(applications);
         }
@@ -97,7 +97,7 @@ namespace IISManager.ViewModels
         {
             if (applicationPool.State != ObjectState.Stopped)
             {
-                return applicationPool.WorkerProcesses.Select(p => new WorkerProcess(p, cpuUsageCounters.GetWorkerProcessDiagnosticValuesForProcessId(p.ProcessId))).ToList();
+                return applicationPool.WorkerProcesses.Select(p => new WorkerProcess(p, workerProcessDiagnostics.GetWorkerProcessDiagnosticValuesForProcessId(p.ProcessId))).ToList();
             }
 
             return new List<WorkerProcess>();

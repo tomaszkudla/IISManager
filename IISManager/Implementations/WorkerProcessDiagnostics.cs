@@ -1,4 +1,5 @@
 ﻿using IISManager.Utils;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,25 +9,14 @@ namespace IISManager.Implementations
 {
     public sealed class WorkerProcessDiagnostics
     {
-        private static readonly WorkerProcessDiagnostics instance = new WorkerProcessDiagnostics();
+        private readonly ILogger<WorkerProcessDiagnostics> logger;
         private readonly GenericMemoryCache<Tuple<DateTime, TimeSpan>> lastValues = new GenericMemoryCache<Tuple<DateTime, TimeSpan>>("CPU-USAGE-LAST-VALUES", TimeSpan.FromSeconds(10));
         private Dictionary<int, double> cpuUsagesByProcessId = new Dictionary<int, double>();
         private Dictionary<int, double> memoryUsagesByProcessId = new Dictionary<int, double>();
 
-        static WorkerProcessDiagnostics()
+        public WorkerProcessDiagnostics(ILoggerFactory loggerFactory)
         {
-        }
-
-        private WorkerProcessDiagnostics()
-        {
-        }
-
-        public static WorkerProcessDiagnostics Instance
-        {
-            get
-            {
-                return instance;
-            }
+            logger = loggerFactory.CreateLogger<WorkerProcessDiagnostics>();
         }
 
         public WorkerProcessDiagnosticValues GetWorkerProcessDiagnosticValuesForProcessId(int processId)

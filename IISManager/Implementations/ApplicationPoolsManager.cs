@@ -10,11 +10,13 @@ namespace IISManager.Implementations
     public sealed class ApplicationPoolsManager
     {
         private readonly ILogger<ApplicationPoolsManager> logger;
+        private readonly WorkerProcessDiagnostics workerProcessDiagnostics;
         private readonly ApplicationPoolsList applicationPools = new ApplicationPoolsList();
 
-        public ApplicationPoolsManager(ILoggerFactory loggerFactory)
+        public ApplicationPoolsManager(ILoggerFactory loggerFactory, WorkerProcessDiagnostics workerProcessDiagnostics)
         {
             logger = loggerFactory.CreateLogger<ApplicationPoolsManager>();
+            this.workerProcessDiagnostics = workerProcessDiagnostics;
             Refresh();
         }
 
@@ -32,9 +34,9 @@ namespace IISManager.Implementations
         {
             using (var serverManager = new ServerManager())
             {
-                WorkerProcessDiagnostics.Instance.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
+                workerProcessDiagnostics.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
                 var applications = GetApplications(serverManager.Sites);
-                applicationPools.Value = serverManager.ApplicationPools.Select(p => new ViewModels.ApplicationPool(p, applications.Where(a => a.ApplicationPoolName == p.Name).ToList())).ToList();
+                applicationPools.Value = serverManager.ApplicationPools.Select(p => new ViewModels.ApplicationPool(p, applications.Where(a => a.ApplicationPoolName == p.Name).ToList(), workerProcessDiagnostics)).ToList();
             }
         }
 

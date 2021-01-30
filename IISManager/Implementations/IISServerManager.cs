@@ -1,25 +1,15 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace IISManager.Implementations
 {
     public sealed class IISServerManager
     {
-        private static readonly IISServerManager instance = new IISServerManager();
+        private readonly ILogger<IISServerManager> logger;
 
-        static IISServerManager()
+        public IISServerManager(ILoggerFactory loggerFactory)
         {
-        }
-
-        private IISServerManager()
-        {
-        }
-
-        public static IISServerManager Instance
-        {
-            get
-            {
-                return instance;
-            }
+            logger = loggerFactory.CreateLogger<IISServerManager>();
         }
 
         public void Start()

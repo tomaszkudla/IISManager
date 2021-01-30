@@ -28,7 +28,9 @@ namespace IISManagerUI
 
         private void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<WorkerProcessDiagnostics>();
             services.AddSingleton<ApplicationPoolsManager>();
+            services.AddSingleton<IISServerManager>();
             services.AddSingleton<RefreshingTimer>();
             services.AddSingleton<AppPoolsControl>();
             services.AddSingleton<TopPanel>();

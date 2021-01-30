@@ -23,11 +23,11 @@ namespace IISManagerUI
         private readonly ApplicationPoolsManager manager;
         private readonly IISServerManager iisServerManager;
 
-        public TopPanel(ApplicationPoolsManager manager)
+        public TopPanel(ApplicationPoolsManager manager, IISServerManager iisServerManager)
         {
             InitializeComponent();
             this.manager = manager;
-            iisServerManager = IISServerManager.Instance;
+            this.iisServerManager = iisServerManager;
             selectAllCheckBox.DataContext = manager.AllSelected;
             searchTextBox.DataContext = manager.ApplicationPools;
         }
