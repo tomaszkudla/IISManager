@@ -1,6 +1,7 @@
 ﻿using IISManager.ViewModels;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.ServiceProcess;
 
 namespace IISManager.Implementations
 {
@@ -28,6 +29,12 @@ namespace IISManager.Implementations
         public void Reset()
         {
             GetIISResetProcess().Start();
+        }
+
+        public bool IsIISStopped()
+        {
+            var sc = new ServiceController("W3SVC");
+            return sc.Status.Equals(ServiceControllerStatus.Stopped) || sc.Status.Equals(ServiceControllerStatus.StopPending);
         }
 
         private Process GetIISResetProcess(string arguments = null)

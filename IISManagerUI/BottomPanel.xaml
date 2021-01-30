@@ -16,6 +16,19 @@
             <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="Margin" Value="1,1,3,1" />
         </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}" x:Key="UserMessageTextBox">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Type}" Value="Info">
+                    <Setter Property="Foreground" Value="#E6E6E6" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="Warn">
+                    <Setter Property="Foreground" Value="Yellow" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="Error">
+                    <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -23,7 +36,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Name="userMessagePanel">
-            <TextBox Text="{Binding Message}" />
+            <TextBox Text="{Binding Message}" Style="{StaticResource UserMessageTextBox}" />
         </StackPanel>
         <StackPanel Grid.Column="1" Name="selfDiagnosticsPanel">
             <Grid>

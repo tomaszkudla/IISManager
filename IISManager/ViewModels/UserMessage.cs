@@ -51,6 +51,30 @@ namespace IISManager.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         
+        public void SetInfo(string message)
+        {
+            Message = message;
+            Type = UserMessageType.Info;
+        }
+
+        public void SetWarn(string message)
+        {
+            Message = message;
+            Type = UserMessageType.Warn;
+        }
+
+        public void SetError(string message)
+        {
+            Message = message;
+            Type = UserMessageType.Error;
+        }
+
+        public void Clear(string message)
+        {
+            Message = null;
+            Type = UserMessageType.Info;
+        }
+
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Message = null;

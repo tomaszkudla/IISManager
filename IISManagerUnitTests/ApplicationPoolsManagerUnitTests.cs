@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IISManager.Implementations;
 using Microsoft.Extensions.Logging.Abstractions;
+using IISManager.ViewModels;
 
 namespace IISManagerUnitTests
 {
@@ -9,12 +10,17 @@ namespace IISManagerUnitTests
     {
         private readonly CurrentProcessWrapper currentProcessWrapper;
         private readonly ProcessDiagnostics processDiagnostics;
+        private readonly IISServerManager iisServerManager;
+        private readonly UserMessage userMessage;
         private readonly ApplicationPoolsManager manager;
+
         public ApplicationPoolsManagerUnitTests()
         {
             currentProcessWrapper = new CurrentProcessWrapper();
             processDiagnostics = new ProcessDiagnostics(NullLoggerFactory.Instance, currentProcessWrapper);
-            manager = new ApplicationPoolsManager(NullLoggerFactory.Instance, processDiagnostics);
+            userMessage = new UserMessage();
+            iisServerManager = new IISServerManager(NullLoggerFactory.Instance, userMessage);
+            manager = new ApplicationPoolsManager(NullLoggerFactory.Instance, processDiagnostics, iisServerManager, userMessage);
         }
 
         [TestMethod]

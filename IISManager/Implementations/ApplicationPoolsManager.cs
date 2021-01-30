@@ -11,12 +11,16 @@ namespace IISManager.Implementations
     {
         private readonly ILogger<ApplicationPoolsManager> logger;
         private readonly ProcessDiagnostics processDiagnostics;
+        private readonly IISServerManager iisServerManager;
+        private readonly UserMessage userMessage;
         private readonly ApplicationPoolsList applicationPools = new ApplicationPoolsList();
 
-        public ApplicationPoolsManager(ILoggerFactory loggerFactory, ProcessDiagnostics processDiagnostics)
+        public ApplicationPoolsManager(ILoggerFactory loggerFactory, ProcessDiagnostics processDiagnostics, IISServerManager iisServerManager, UserMessage userMessage)
         {
             logger = loggerFactory.CreateLogger<ApplicationPoolsManager>();
             this.processDiagnostics = processDiagnostics;
+            this.iisServerManager = iisServerManager;
+            this.userMessage = userMessage;
             Refresh();
         }
 
@@ -34,9 +38,23 @@ namespace IISManager.Implementations
         {
             using (var serverManager = new ServerManager())
             {
-                processDiagnostics.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
+                var isIISStopped = iisServerManager.IsIISStopped();
+                if (!isIISStopped)
+                {
+                    processDiagnostics.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
+                }
+
                 var applications = GetApplications(serverManager.Sites);
                 applicationPools.Value = serverManager.ApplicationPools.Select(p => new ViewModels.ApplicationPool(p, applications.Where(a => a.ApplicationPoolName == p.Name).ToList(), processDiagnostics)).ToList();
+                    
+                if (isIISStopped && applicationPools.Value.All(p => p.State == ApplicationPoolState.Stopped))
+                {
+                    userMessage.SetWarn(UserMessageText.IISIsNotRunning);
+                }
+                else if (userMessage.Message == UserMessageText.IISIsNotRunning)
+                {
+                    userMessage.SetInfo(UserMessageText.IISStarted);
+                }
             }
         }
 
