@@ -2,6 +2,7 @@
 using IISManager.ViewModels;
 using Microsoft.Extensions.Logging;
 using Microsoft.Web.Administration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -36,25 +37,36 @@ namespace IISManager.Implementations
 
         public void Refresh()
         {
-            using (var serverManager = new ServerManager())
+            try
             {
-                var isIISStopped = iisServerManager.IsIISStopped();
-                if (!isIISStopped)
+                using (var serverManager = new ServerManager())
                 {
-                    processDiagnostics.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
-                }
+                    var isIISStopped = iisServerManager.IsIISStopped();
+                    if (!isIISStopped)
+                    {
+                        processDiagnostics.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
+                    }
 
-                var applications = GetApplications(serverManager.Sites);
-                applicationPools.Value = serverManager.ApplicationPools.Select(p => new ViewModels.ApplicationPool(p, applications.Where(a => a.ApplicationPoolName == p.Name).ToList(), processDiagnostics)).ToList();
+                    var applications = GetApplications(serverManager.Sites);
+                    applicationPools.Value = serverManager.ApplicationPools.Select(p => new ViewModels.ApplicationPool(p, applications.Where(a => a.ApplicationPoolName == p.Name).ToList(), processDiagnostics)).ToList();
                     
-                if (isIISStopped && applicationPools.Value.All(p => p.State == ApplicationPoolState.Stopped))
-                {
-                    userMessage.SetWarn(UserMessageText.IISIsNotRunning);
+                    if (isIISStopped && applicationPools.Value.All(p => p.State == ApplicationPoolState.Stopped))
+                    {
+                        userMessage.SetWarn(UserMessageText.IISIsNotRunning);
+                    }
+                    else if (userMessage.Message == UserMessageText.IISIsNotRunning)
+                    {
+                        userMessage.SetInfo(UserMessageText.IISStarted);
+                    }
                 }
-                else if (userMessage.Message == UserMessageText.IISIsNotRunning)
-                {
-                    userMessage.SetInfo(UserMessageText.IISStarted);
-                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                userMessage.SetError("Please run the application as an administrator");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error during refresh. {ex}");
             }
         }
 
