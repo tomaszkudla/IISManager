@@ -1,5 +1,4 @@
-﻿using IISManager.Utils;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace IISManager.Implementations
 {
@@ -8,6 +7,7 @@ namespace IISManager.Implementations
         public CurrentProcessWrapper()
         {
             CurrentProcess = Process.GetCurrentProcess();
+
         }
 
         public Process CurrentProcess { get; }

@@ -1,4 +1,5 @@
 ﻿using IISManager.Implementations;
+using IISManager.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
@@ -15,7 +16,7 @@ namespace IISManagerUI
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         private readonly ServiceProvider serviceProvider;
 
@@ -28,6 +29,7 @@ namespace IISManagerUI
 
         private void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<SelfDiagnostics>();
             services.AddSingleton<CurrentProcessWrapper>();
             services.AddSingleton<ProcessDiagnostics>();
             services.AddSingleton<ApplicationPoolsManager>();
