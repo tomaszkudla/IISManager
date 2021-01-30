@@ -25,7 +25,7 @@ namespace IISManagerUI
     public partial class AppPoolsControl : UserControl
     {
         private readonly ApplicationPoolsManager manager;
-        private readonly RefreshingTimer timer; 
+        private readonly RefreshingTimer timer;
 
         public AppPoolsControl(ApplicationPoolsManager manager, RefreshingTimer refreshingTimer)
         {
@@ -56,12 +56,9 @@ namespace IISManagerUI
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            Task.Run(() => 
-            { 
-                Utils.SafeExecute(() =>
-                {
-                    manager.Refresh();
-                });
+            Task.Run(() =>
+            {
+                manager.Refresh();
             });
         }
 

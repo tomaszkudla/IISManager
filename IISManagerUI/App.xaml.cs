@@ -19,12 +19,14 @@ namespace IISManagerUI
     public partial class App : System.Windows.Application
     {
         private readonly ServiceProvider serviceProvider;
+        private readonly ILogger<App> logger;
 
         public App()
         {
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             serviceProvider = serviceCollection.BuildServiceProvider();
+            logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<App>();
         }
 
         private void ConfigureServices(IServiceCollection services)
@@ -55,8 +57,27 @@ namespace IISManagerUI
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
+            SetupExceptionHandling();
             var mainWindow = serviceProvider.GetService<MainWindow>();
             mainWindow.Show();
+        }
+
+        private void SetupExceptionHandling()
+        {
+            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+                logger.LogError((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+
+            DispatcherUnhandledException += (s, e) =>
+            {
+                logger.LogError(e.Exception, "Application.Current.DispatcherUnhandledException");
+                e.Handled = true;
+            };
+
+            TaskScheduler.UnobservedTaskException += (s, e) =>
+            {
+                logger.LogError(e.Exception, "TaskScheduler.UnobservedTaskException");
+                e.SetObserved();
+            };
         }
     }
 }

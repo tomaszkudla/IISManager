@@ -62,11 +62,12 @@ namespace IISManager.Implementations
             }
             catch (UnauthorizedAccessException)
             {
-                userMessage.SetError("Please run the application as an administrator");
+                userMessage.SetError(UserMessageText.RunAsAdmin);
             }
             catch (Exception ex)
             {
-                logger.LogError($"Error during refresh. {ex}");
+                userMessage.SetError(UserMessageText.ErrorDuringRefresh);
+                logger.LogError(ex, "Error during refresh.");
             }
         }
 
