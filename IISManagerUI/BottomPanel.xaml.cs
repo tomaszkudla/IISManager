@@ -22,14 +22,17 @@ namespace IISManagerUI
     {
         private readonly RefreshingTimer timer;
         private readonly SelfDiagnostics selfDiagnostics;
+        private readonly UserMessage userMessage;
 
-        public BottomPanel(SelfDiagnostics selfDiagnostics, RefreshingTimer refreshingTimer)
+        public BottomPanel(SelfDiagnostics selfDiagnostics, RefreshingTimer refreshingTimer, UserMessage userMessage)
         {
             InitializeComponent();
             this.selfDiagnostics = selfDiagnostics;
             selfDiagnosticsPanel.DataContext = selfDiagnostics;
             timer = refreshingTimer;
             timer.Tick += Timer_Tick;
+            this.userMessage = userMessage;
+            userMessagePanel.DataContext = userMessage;
         }
 
         private void Timer_Tick(object sender, EventArgs e)

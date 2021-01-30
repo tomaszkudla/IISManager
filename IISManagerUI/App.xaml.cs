@@ -30,6 +30,7 @@ namespace IISManagerUI
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<SelfDiagnostics>();
+            services.AddSingleton<UserMessage>();
             services.AddSingleton<CurrentProcessWrapper>();
             services.AddSingleton<ProcessDiagnostics>();
             services.AddSingleton<ApplicationPoolsManager>();
