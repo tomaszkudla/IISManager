@@ -10,13 +10,13 @@ namespace IISManager.ViewModels
         private string memoryUsage;
         private WorkerProcessState state;
 
-        public WorkerProcess(Microsoft.Web.Administration.WorkerProcess workerProcess, WorkerProcessDiagnosticValues workerProcessDiagnostics)
+        public WorkerProcess(Microsoft.Web.Administration.WorkerProcess workerProcess, ProcessDiagnosticValues processDiagnosticValues)
         {
             id = workerProcess.ProcessId;
             state = (WorkerProcessState)(int)workerProcess.State;
-            cpuUsage = workerProcessDiagnostics.CpuUsage.ToString();
-            memoryUsage = workerProcessDiagnostics.MemoryUsage.ToString();
-            WorkerProcessDiagnostics = workerProcessDiagnostics;
+            cpuUsage = processDiagnosticValues.CpuUsage.ToString();
+            memoryUsage = processDiagnosticValues.MemoryUsage.ToString();
+            ProcessDiagnosticValues = processDiagnosticValues;
         }
 
         public int Id
@@ -71,7 +71,7 @@ namespace IISManager.ViewModels
             }
         }
 
-        public WorkerProcessDiagnosticValues WorkerProcessDiagnostics { get; }
+        public ProcessDiagnosticValues ProcessDiagnosticValues { get; }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
     }

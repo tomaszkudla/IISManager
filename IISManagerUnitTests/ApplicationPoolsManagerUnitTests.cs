@@ -7,12 +7,14 @@ namespace IISManagerUnitTests
     [TestClass]
     public class ApplicationPoolsManagerUnitTests
     {
-        private readonly WorkerProcessDiagnostics workerProcessDiagnostics;
+        private readonly CurrentProcessWrapper currentProcessWrapper;
+        private readonly ProcessDiagnostics processDiagnostics;
         private readonly ApplicationPoolsManager manager;
         public ApplicationPoolsManagerUnitTests()
         {
-            workerProcessDiagnostics = new WorkerProcessDiagnostics(NullLoggerFactory.Instance);
-            manager = new ApplicationPoolsManager(NullLoggerFactory.Instance, workerProcessDiagnostics);
+            currentProcessWrapper = new CurrentProcessWrapper();
+            processDiagnostics = new ProcessDiagnostics(NullLoggerFactory.Instance, currentProcessWrapper);
+            manager = new ApplicationPoolsManager(NullLoggerFactory.Instance, processDiagnostics);
         }
 
         [TestMethod]

@@ -7,35 +7,41 @@ using System.Linq;
 
 namespace IISManager.Implementations
 {
-    public sealed class WorkerProcessDiagnostics
+    public sealed class ProcessDiagnostics
     {
-        private readonly ILogger<WorkerProcessDiagnostics> logger;
+        private readonly ILogger<ProcessDiagnostics> logger;
+        private readonly Process currentProcess;
         private readonly GenericMemoryCache<Tuple<DateTime, TimeSpan>> lastValues = new GenericMemoryCache<Tuple<DateTime, TimeSpan>>("CPU-USAGE-LAST-VALUES", TimeSpan.FromSeconds(10));
         private Dictionary<int, double> cpuUsagesByProcessId = new Dictionary<int, double>();
         private Dictionary<int, double> memoryUsagesByProcessId = new Dictionary<int, double>();
 
-        public WorkerProcessDiagnostics(ILoggerFactory loggerFactory)
+        public ProcessDiagnostics(ILoggerFactory loggerFactory, CurrentProcessWrapper currentProcessWrapper)
         {
-            logger = loggerFactory.CreateLogger<WorkerProcessDiagnostics>();
+            logger = loggerFactory.CreateLogger<ProcessDiagnostics>();
+            currentProcess = currentProcessWrapper.CurrentProcess;
         }
 
-        public WorkerProcessDiagnosticValues GetWorkerProcessDiagnosticValuesForProcessId(int processId)
+        public ProcessDiagnosticValues GetProcessDiagnosticValuesByProcessId(int processId)
         {
             cpuUsagesByProcessId.TryGetValue(processId, out var cpuUsage);
             memoryUsagesByProcessId.TryGetValue(processId, out var memoryUsage);
-            return new WorkerProcessDiagnosticValues(cpuUsage, memoryUsage);
+            return new ProcessDiagnosticValues(cpuUsage, memoryUsage);
+        }
+
+        public ProcessDiagnosticValues GetProcessDiagnosticValuesForCurrentProcess()
+        {
+            cpuUsagesByProcessId.TryGetValue(currentProcess.Id, out var cpuUsage);
+            memoryUsagesByProcessId.TryGetValue(currentProcess.Id, out var memoryUsage);
+            return new ProcessDiagnosticValues(cpuUsage, memoryUsage);
         }
 
         public void Refresh(IEnumerable<int> processIds)
         {
             var newCpuUsagesByProcessId = new Dictionary<int, double>();
             var newMemoryUsagesByProcessId = new Dictionary<int, double>();
-            foreach (var id in processIds.Distinct())
-            {
-                var process = Process.GetProcessById(id);
-                RefreshCpuUsage(newCpuUsagesByProcessId, id, process);
-                RefreshMemoryUsage(newMemoryUsagesByProcessId, id, process);
-            }
+
+            RefreshProcessesUsages(processIds, newCpuUsagesByProcessId, newMemoryUsagesByProcessId);
+            RefreshCurrentProcessUsages(newCpuUsagesByProcessId, newMemoryUsagesByProcessId);
 
             cpuUsagesByProcessId = newCpuUsagesByProcessId;
             memoryUsagesByProcessId = newMemoryUsagesByProcessId;
@@ -66,6 +72,22 @@ namespace IISManager.Implementations
         private void RefreshMemoryUsage(Dictionary<int, double> newMemoryUsagesByProcessId, int id, Process process)
         {
             newMemoryUsagesByProcessId.Add(id, process.PrivateMemorySize64 / (double)1048576);
+        }
+
+        private void RefreshProcessesUsages(IEnumerable<int> processIds, Dictionary<int, double> newCpuUsagesByProcessId, Dictionary<int, double> newMemoryUsagesByProcessId)
+        {
+            foreach (var id in processIds.Distinct())
+            {
+                var process = Process.GetProcessById(id);
+                RefreshCpuUsage(newCpuUsagesByProcessId, id, process);
+                RefreshMemoryUsage(newMemoryUsagesByProcessId, id, process);
+            }
+        }
+
+        private void RefreshCurrentProcessUsages(Dictionary<int, double> newCpuUsagesByProcessId, Dictionary<int, double> newMemoryUsagesByProcessId)
+        {
+            RefreshCpuUsage(newCpuUsagesByProcessId, currentProcess.Id, currentProcess);
+            RefreshMemoryUsage(newMemoryUsagesByProcessId, currentProcess.Id, currentProcess);
         }
     }
 }

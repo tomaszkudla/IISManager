@@ -28,7 +28,8 @@ namespace IISManagerUI
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<WorkerProcessDiagnostics>();
+            services.AddSingleton<CurrentProcessWrapper>();
+            services.AddSingleton<ProcessDiagnostics>();
             services.AddSingleton<ApplicationPoolsManager>();
             services.AddSingleton<IISServerManager>();
             services.AddSingleton<RefreshingTimer>();
