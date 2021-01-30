@@ -37,6 +37,7 @@ namespace IISManagerUI
             services.AddSingleton<RefreshingTimer>();
             services.AddSingleton<AppPoolsControl>();
             services.AddSingleton<TopPanel>();
+            services.AddSingleton<BottomPanel>();
             services.AddSingleton<MainWindow>();
 
             var config = new NLog.Config.LoggingConfiguration();

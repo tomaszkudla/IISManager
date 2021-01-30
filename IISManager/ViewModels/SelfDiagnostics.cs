@@ -12,6 +12,7 @@ namespace IISManager.ViewModels
         public SelfDiagnostics(ProcessDiagnostics processDiagnostics)
         {
             this.processDiagnostics = processDiagnostics;
+            Refresh();
         }
 
         public string CpuUsage
