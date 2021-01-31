@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.IO;
 
 namespace IISManagerUI
 {
@@ -71,6 +72,40 @@ namespace IISManagerUI
                 }
 
                 return 30.0;
+            }
+        }
+
+        public static NLog.LogLevel LogLevel
+        {
+            get
+            {
+                var valueRaw = ConfigurationManager.AppSettings["LogLevel"];
+                if (!string.IsNullOrEmpty(valueRaw))
+                {
+                    try
+                    {
+                        return NLog.LogLevel.FromString(valueRaw);
+                    }
+                    catch
+                    {
+                    }
+                }
+
+                return NLog.LogLevel.Info;
+            }
+        }
+
+        public static string LogsDirPath
+        {
+            get
+            {
+                var value = ConfigurationManager.AppSettings["LogsDirPath"];
+                if (!string.IsNullOrEmpty(value) && Directory.Exists(value))
+                {
+                    return value;
+                }
+
+                return "Logs";
             }
         }
     }

@@ -3,11 +3,14 @@ using IISManager.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using NLog.Targets;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -25,8 +28,10 @@ namespace IISManagerUI
         {
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
+            ConfigureLogging(serviceCollection);
             serviceProvider = serviceCollection.BuildServiceProvider();
             logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<App>();
+            logger.LogTrace("Application started");
         }
 
         private void ConfigureServices(IServiceCollection services)
@@ -42,10 +47,23 @@ namespace IISManagerUI
             services.AddSingleton<TopPanel>();
             services.AddSingleton<BottomPanel>();
             services.AddSingleton<MainWindow>();
+        }
 
+        private void ConfigureLogging(IServiceCollection services)
+        {
+            var logsDirPath = Configuration.LogsDirPath;
             var config = new NLog.Config.LoggingConfiguration();
-            var logfile = new NLog.Targets.FileTarget("logfile") { FileName = "log.txt" };
-            config.AddRule(NLog.LogLevel.Trace, NLog.LogLevel.Fatal, logfile);
+            var logfile = new NLog.Targets.FileTarget("logfile")
+            {
+                FileName = Path.Combine(logsDirPath, "${shortdate}.log"),
+                ConcurrentWrites = true,
+                Encoding = Encoding.UTF8,
+                ArchiveAboveSize = 10485760,
+                ArchiveNumbering = ArchiveNumberingMode.Sequence,
+                ArchiveFileName = Path.Combine(logsDirPath, "${shortdate}.{#####}.log"),
+                MaxArchiveFiles = 50,
+            };
+            config.AddRule(Configuration.LogLevel, NLog.LogLevel.Fatal, logfile);
 
             services.AddLogging(loggingBuilder =>
             {

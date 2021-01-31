@@ -42,7 +42,11 @@ namespace IISManager.Implementations
                 using (var serverManager = new ServerManager())
                 {
                     var isIISStopped = iisServerManager.IsIISStopped();
-                    if (!isIISStopped)
+                    if (isIISStopped)
+                    {
+                        processDiagnostics.Refresh(Enumerable.Empty<int>());
+                    }
+                    else
                     {
                         processDiagnostics.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
                     }
@@ -60,16 +64,17 @@ namespace IISManager.Implementations
                     }
                 }
             }
-            catch (Exception ex)
+            catch (UnauthorizedAccessException ex)
             {
                 if (ex.Message.Contains("Cannot read configuration file due to insufficient permissions"))
                 {
                     userMessage.SetError(UserMessageText.RunAsAdmin);
-                    return;
                 }
-
+            }
+            catch (Exception ex)
+            {
                 userMessage.SetError(UserMessageText.ErrorDuringRefresh);
-                logger.LogError(ex, "Error during refresh.");
+                logger.LogError($"Error during refresh. {ex}");
             }
         }
 

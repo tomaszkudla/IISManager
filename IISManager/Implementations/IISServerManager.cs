@@ -41,7 +41,7 @@ namespace IISManager.Implementations
                     }
                     else
                     {
-                        logger.LogError($"IIS stopped. Console output:{output}");
+                        logger.LogTrace($"IIS stopped. Console output:{output}");
                     }
                 }
                 catch (Exception ex)
