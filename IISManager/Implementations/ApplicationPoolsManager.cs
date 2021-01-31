@@ -60,12 +60,14 @@ namespace IISManager.Implementations
                     }
                 }
             }
-            catch (UnauthorizedAccessException)
-            {
-                userMessage.SetError(UserMessageText.RunAsAdmin);
-            }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("Cannot read configuration file due to insufficient permissions"))
+                {
+                    userMessage.SetError(UserMessageText.RunAsAdmin);
+                    return;
+                }
+
                 userMessage.SetError(UserMessageText.ErrorDuringRefresh);
                 logger.LogError(ex, "Error during refresh.");
             }

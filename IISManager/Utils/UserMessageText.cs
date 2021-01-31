@@ -6,5 +6,6 @@
         public const string IISStarted = "IIS started";
         public const string RunAsAdmin = "Please run the application as an administrator";
         public const string ErrorDuringRefresh = "Cannot refresh - please check the logs";
+        public const string IISAlreadyStopped = "IIS is already stopped";
     }
 }

@@ -1,7 +1,9 @@
-﻿using IISManager.ViewModels;
+﻿using IISManager.Utils;
+using IISManager.ViewModels;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.ServiceProcess;
+using System.Threading.Tasks;
 
 namespace IISManager.Implementations
 {
@@ -23,7 +25,19 @@ namespace IISManager.Implementations
 
         public void Stop()
         {
-            GetIISResetProcess("/stop").Start();
+            if (IsIISStopped())
+            {
+                userMessage.SetInfo(UserMessageText.IISAlreadyStopped);
+            }
+            else
+            {
+                Task.Run(() =>
+                {
+                    var process = GetIISResetProcess("/stop");
+                    process.Start();
+                    process.WaitForExit();
+                });
+            }
         }
 
         public void Reset()
@@ -33,8 +47,10 @@ namespace IISManager.Implementations
 
         public bool IsIISStopped()
         {
-            var sc = new ServiceController("W3SVC");
-            return sc.Status.Equals(ServiceControllerStatus.Stopped) || sc.Status.Equals(ServiceControllerStatus.StopPending);
+            using (var sc = new ServiceController("W3SVC"))
+            {
+                return sc.Status.Equals(ServiceControllerStatus.Stopped) || sc.Status.Equals(ServiceControllerStatus.StopPending);
+            }
         }
 
         private Process GetIISResetProcess(string arguments = null)
