@@ -1,6 +1,7 @@
 ﻿using IISManager.Utils;
 using IISManager.ViewModels;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Threading.Tasks;
@@ -25,19 +26,36 @@ namespace IISManager.Implementations
 
         public void Stop()
         {
-            if (IsIISStopped())
+            Task.Run(() =>
             {
-                userMessage.SetInfo(UserMessageText.IISAlreadyStopped);
-            }
-            else
-            {
-                Task.Run(() =>
+                logger.LogTrace("IIS stop requested");
+                try
                 {
                     var process = GetIISResetProcess("/stop");
                     process.Start();
                     process.WaitForExit();
-                });
-            }
+                    var output = process.StandardOutput.ReadToEnd().TrimEnd();
+                    if (process.ExitCode != 0)
+                    {
+                        logger.LogError($"Failed to stop IIS. Console output:{output}");
+                    }
+                    else
+                    {
+                        logger.LogError($"IIS stopped. Console output:{output}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (IsIISStopped())
+                    {
+                        logger.LogTrace($"Exception during IIS stop request. {ex}");
+                    }
+                    else
+                    {
+                        logger.LogError($"Failed to stop IIS. {ex}");
+                    }
+                }
+            });
         }
 
         public void Reset()
