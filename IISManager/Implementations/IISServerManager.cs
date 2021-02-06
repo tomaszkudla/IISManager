@@ -21,7 +21,36 @@ namespace IISManager.Implementations
 
         public void Start()
         {
-            GetIISResetProcess("/start").Start();
+            Task.Run(() =>
+            {
+                logger.LogTrace("IIS start requested");
+                try
+                {
+                    var process = GetIISResetProcess("/start");
+                    process.Start();
+                    process.WaitForExit();
+                    var output = process.StandardOutput.ReadToEnd().TrimEnd();
+                    if (process.ExitCode != 0)
+                    {
+                        logger.LogError($"Failed to start IIS. Console output:{output}");
+                    }
+                    else
+                    {
+                        logger.LogTrace($"IIS started. Console output:{output}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (!IsIISStopped())
+                    {
+                        logger.LogTrace($"An exception occured during IIS start request. {ex}");
+                    }
+                    else
+                    {
+                        logger.LogError($"Failed to start IIS. {ex}");
+                    }
+                }
+            });
         }
 
         public void Stop()
@@ -48,7 +77,7 @@ namespace IISManager.Implementations
                 {
                     if (IsIISStopped())
                     {
-                        logger.LogTrace($"Exception during IIS stop request. {ex}");
+                        logger.LogTrace($"An exception occured IIS stop request. {ex}");
                     }
                     else
                     {
@@ -60,7 +89,36 @@ namespace IISManager.Implementations
 
         public void Reset()
         {
-            GetIISResetProcess().Start();
+            Task.Run(() =>
+            {
+                logger.LogTrace("IIS reset requested");
+                try
+                {
+                    var process = GetIISResetProcess();
+                    process.Start();
+                    process.WaitForExit();
+                    var output = process.StandardOutput.ReadToEnd().TrimEnd();
+                    if (process.ExitCode != 0)
+                    {
+                        logger.LogError($"Failed to reset IIS. Console output:{output}");
+                    }
+                    else
+                    {
+                        logger.LogTrace($"IIS reset. Console output:{output}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (!IsIISStopped())
+                    {
+                        logger.LogTrace($"An exception occured during IIS reset request. {ex}");
+                    }
+                    else
+                    {
+                        logger.LogError($"Failed to reset IIS. {ex}");
+                    }
+                }
+            });
         }
 
         public bool IsIISStopped()
