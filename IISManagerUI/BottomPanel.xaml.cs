@@ -1,4 +1,5 @@
-﻿using IISManager.ViewModels;
+﻿using IISManager.Utils;
+using IISManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -43,6 +44,14 @@ namespace IISManagerUI
                 {
                     selfDiagnostics.Refresh();
                 });
+            });
+        }
+
+        private void OpenLogsDir_Click(object sender, MouseButtonEventArgs e)
+        {
+            Utils.SafeExecute(() =>
+            {
+                ProcessUtils.GoToPath(Configuration.LogsDirPath);
             });
         }
     }

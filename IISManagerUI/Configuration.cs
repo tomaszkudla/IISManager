@@ -105,7 +105,7 @@ namespace IISManagerUI
                     return value;
                 }
 
-                return "Logs";
+                return Path.Combine(Directory.GetCurrentDirectory(), "Logs");
             }
         }
     }
