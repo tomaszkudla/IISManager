@@ -78,9 +78,15 @@ namespace IISManager.Implementations
         {
             foreach (var id in processIds.Distinct())
             {
-                var process = Process.GetProcessById(id);
-                RefreshCpuUsage(newCpuUsagesByProcessId, id, process);
-                RefreshMemoryUsage(newMemoryUsagesByProcessId, id, process);
+                try
+                {
+                    var process = Process.GetProcessById(id);
+                    RefreshCpuUsage(newCpuUsagesByProcessId, id, process);
+                    RefreshMemoryUsage(newMemoryUsagesByProcessId, id, process);
+                }
+                catch (ArgumentException)
+                {
+                }
             }
         }
 
