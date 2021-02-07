@@ -58,26 +58,17 @@ namespace IISManagerUI
 
         private void StartIIS_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SafeExecute(() =>
-            {
-                iisServerManager.Start();
-            });
+            iisServerManager.Start();
         }
 
         private void StopIIS_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SafeExecute(() =>
-            {
-                iisServerManager.Stop();
-            });
+            iisServerManager.Stop();
         }
 
         private void ResetIIS_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SafeExecute(() =>
-            {
-                iisServerManager.Reset();
-            });
+            iisServerManager.Reset();
         }
 
         private void SelectAllCheckBox_Click(object sender, RoutedEventArgs e)
