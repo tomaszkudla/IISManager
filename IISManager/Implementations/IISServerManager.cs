@@ -41,13 +41,20 @@ namespace IISManager.Implementations
                 }
                 catch (Exception ex)
                 {
-                    if (!IsIISStopped())
+                    try
                     {
-                        logger.LogTrace($"An exception occured during IIS start request. {ex}");
+                        if (!IsIISStopped())
+                        {
+                            logger.LogTrace($"An exception occured during IIS start request. {ex}");
+                        }
+                        else
+                        {
+                            logger.LogError($"Failed to start IIS. {ex}");
+                        }
                     }
-                    else
+                    catch (Exception statusCheckEx)
                     {
-                        logger.LogError($"Failed to start IIS. {ex}");
+                        logger.LogError($"Failed to start IIS. {ex} Failed to check IIS status {statusCheckEx}");
                     }
                 }
             });
@@ -75,13 +82,20 @@ namespace IISManager.Implementations
                 }
                 catch (Exception ex)
                 {
-                    if (IsIISStopped())
+                    try
                     {
-                        logger.LogTrace($"An exception occured IIS stop request. {ex}");
+                        if (IsIISStopped())
+                        {
+                            logger.LogTrace($"An exception occured during IIS stop request. {ex}");
+                        }
+                        else
+                        {
+                            logger.LogError($"Failed to stop IIS. {ex}");
+                        }
                     }
-                    else
+                    catch (Exception statusCheckEx)
                     {
-                        logger.LogError($"Failed to stop IIS. {ex}");
+                        logger.LogError($"Failed to stop IIS. {ex} Failed to check IIS status {statusCheckEx}");
                     }
                 }
             });
@@ -109,14 +123,7 @@ namespace IISManager.Implementations
                 }
                 catch (Exception ex)
                 {
-                    if (!IsIISStopped())
-                    {
-                        logger.LogTrace($"An exception occured during IIS reset request. {ex}");
-                    }
-                    else
-                    {
-                        logger.LogError($"Failed to reset IIS. {ex}");
-                    }
+                    logger.LogError($"Failed to reset IIS. {ex}");
                 }
             });
         }
