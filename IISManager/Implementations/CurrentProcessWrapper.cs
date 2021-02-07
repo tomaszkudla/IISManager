@@ -7,7 +7,6 @@ namespace IISManager.Implementations
         public CurrentProcessWrapper()
         {
             CurrentProcess = Process.GetCurrentProcess();
-
         }
 
         public Process CurrentProcess { get; }

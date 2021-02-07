@@ -34,26 +34,17 @@ namespace IISManagerUI
 
         private void StartSelected_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SafeExecute(() =>
-            {
-                manager.StartSelected();
-            });
+            manager.StartSelected();
         }
 
         private void StopSelected_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SafeExecute(() =>
-            {
-                manager.StopSelected();
-            });
+            manager.StopSelected();
         }
 
         private void RecycleSelected_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SafeExecute(() =>
-            {
-                manager.RecycleSelected();
-            });
+            manager.RecycleSelected();
         }
 
         private void StartIIS_Click(object sender, RoutedEventArgs e)
@@ -73,18 +64,15 @@ namespace IISManagerUI
 
         private void SelectAllCheckBox_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SafeExecute(() =>
+            var checkBox = sender as CheckBox;
+            if (checkBox.IsChecked == true)
             {
-                var checkBox = sender as CheckBox;
-                if (checkBox.IsChecked == true)
-                {
-                    manager.SelectAll();
-                }
-                else
-                {
-                    manager.UnselectAll();
-                }
-            });
+                manager.SelectAll();
+            }
+            else
+            {
+                manager.UnselectAll();
+            }
         }
 
         private void SortByName_Click(object sender, RoutedEventArgs e)

@@ -84,7 +84,7 @@ namespace IISManager.Implementations
                     RefreshCpuUsage(newCpuUsagesByProcessId, id, process);
                     RefreshMemoryUsage(newMemoryUsagesByProcessId, id, process);
                 }
-                catch (ArgumentException)
+                catch
                 {
                 }
             }

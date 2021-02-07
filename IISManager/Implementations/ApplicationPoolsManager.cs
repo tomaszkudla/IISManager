@@ -109,51 +109,114 @@ namespace IISManager.Implementations
         public void StartSelected()
         {
             var selectedPoolNames = applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name);
-            using (var serverManager = new ServerManager())
+            if (!selectedPoolNames.Any() || iisServerManager.IsIISStopped())
             {
-                var allPools = serverManager.ApplicationPools;
-                var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
-                foreach (var appPool in selectedPools)
+                return;
+            }
+
+            logger.LogTrace($"Start requested for the following application pools:{Environment.NewLine}{string.Join(Environment.NewLine, selectedPoolNames)}".TrimEnd());
+
+            try
+            {
+                using (var serverManager = new ServerManager())
                 {
-                    if (appPool.State != ObjectState.Started)
+                    var allPools = serverManager.ApplicationPools;
+                    var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
+                    foreach (var appPool in selectedPools)
                     {
-                        appPool.Start();
+                        if (appPool.State != ObjectState.Started)
+                        {
+                            try
+                            {
+                                appPool.Start();
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.LogError($"Failed to start an application pool {appPool.Name} {ex}");
+                            }
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Failed to start selected application pools {ex}");
             }
         }
 
         public void StopSelected()
         {
             var selectedPoolNames = applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name);
-            using (var serverManager = new ServerManager())
+            if (!selectedPoolNames.Any() || iisServerManager.IsIISStopped())
             {
-                var allPools = serverManager.ApplicationPools;
-                var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
-                foreach (var appPool in selectedPools)
+                return;
+            }
+
+            logger.LogTrace($"Stop requested for the following application pools:{Environment.NewLine}{string.Join(Environment.NewLine, selectedPoolNames)}".TrimEnd());
+
+            try
+            {
+                using (var serverManager = new ServerManager())
                 {
-                    if (appPool.State != ObjectState.Stopped)
+                    var allPools = serverManager.ApplicationPools;
+                    var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
+                    foreach (var appPool in selectedPools)
                     {
-                        appPool.Stop();
+                        if (appPool.State != ObjectState.Stopped)
+                        {
+                            try
+                            {
+                                appPool.Stop();
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.LogError($"Failed to stop an application pool {appPool.Name} {ex}");
+                            }
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Failed to stop selected application pools {ex}");
             }
         }
 
         public void RecycleSelected()
         {
             var selectedPoolNames = applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name);
-            using (var serverManager = new ServerManager())
+            if (!selectedPoolNames.Any() || iisServerManager.IsIISStopped())
             {
-                var allPools = serverManager.ApplicationPools;
-                var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
-                foreach (var appPool in selectedPools)
+                return;
+            }
+
+            logger.LogTrace($"Recycle requested for the following application pools:{Environment.NewLine}{string.Join(Environment.NewLine, selectedPoolNames)}".TrimEnd());
+
+            try
+            {
+                using (var serverManager = new ServerManager())
                 {
-                    if (appPool.State != ObjectState.Stopped)
+                    var allPools = serverManager.ApplicationPools;
+                    var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
+                    foreach (var appPool in selectedPools)
                     {
-                        appPool.Recycle();
+                        if (appPool.State != ObjectState.Stopped)
+                        {
+                            try
+                            {
+                                appPool.Recycle();
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.LogError($"Failed to recycle an application pool {appPool.Name} {ex}");
+                            }
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Failed to recycle selected application pools {ex}");
             }
         }
 
