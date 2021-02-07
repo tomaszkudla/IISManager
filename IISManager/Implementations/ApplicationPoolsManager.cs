@@ -15,6 +15,7 @@ namespace IISManager.Implementations
         private readonly IISServerManager iisServerManager;
         private readonly UserMessage userMessage;
         private readonly ApplicationPoolsList applicationPools = new ApplicationPoolsList();
+        private string lastRefreshExceptionMessage;
 
         public ApplicationPoolsManager(ILoggerFactory loggerFactory, ProcessDiagnostics processDiagnostics, IISServerManager iisServerManager, UserMessage userMessage)
         {
@@ -63,6 +64,8 @@ namespace IISManager.Implementations
                         userMessage.SetInfo(UserMessageText.IISStarted);
                     }
                 }
+
+                lastRefreshExceptionMessage = null;
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -74,7 +77,11 @@ namespace IISManager.Implementations
             catch (Exception ex)
             {
                 userMessage.SetError(UserMessageText.ErrorDuringRefresh);
-                logger.LogError($"Error during refresh. {ex}");
+                if (ex.Message != lastRefreshExceptionMessage)
+                {
+                    logger.LogError($"Error during refresh. {ex}");
+                    lastRefreshExceptionMessage = ex.Message;
+                }
             }
         }
 
