@@ -38,13 +38,7 @@ namespace IISManagerUI
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            Task.Run(() =>
-            {
-                Utils.SafeExecute(() =>
-                {
-                    selfDiagnostics.Refresh();
-                });
-            });
+            Task.Run(() => selfDiagnostics.Refresh());
         }
 
         private void OpenLogsDir_Click(object sender, MouseButtonEventArgs e)

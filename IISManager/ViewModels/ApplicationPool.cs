@@ -69,30 +69,6 @@ namespace IISManager.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        public void Recycle()
-        {
-            if (applicationPool.State != ObjectState.Stopped)
-            {
-                applicationPool.Recycle();
-            }
-        }
-
-        public void Start()
-        {
-            if (applicationPool.State != ObjectState.Started)
-            {
-                applicationPool.Start();
-            }
-        }
-
-        public void Stop()
-        {
-            if (applicationPool.State != ObjectState.Stopped)
-            {
-                applicationPool.Stop();
-            }
-        }
-
         private List<WorkerProcess> GetWorkerProcesses(Microsoft.Web.Administration.ApplicationPool applicationPool)
         {
             if (applicationPool.State != ObjectState.Stopped)
