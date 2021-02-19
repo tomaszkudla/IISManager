@@ -24,8 +24,9 @@ namespace IISManagerUI
         private readonly RefreshingTimer timer;
         private readonly SelfDiagnostics selfDiagnostics;
         private readonly UserMessage userMessage;
+        private readonly ProcessUtils processUtils;
 
-        public BottomPanel(SelfDiagnostics selfDiagnostics, RefreshingTimer refreshingTimer, UserMessage userMessage)
+        public BottomPanel(SelfDiagnostics selfDiagnostics, RefreshingTimer refreshingTimer, UserMessage userMessage, ProcessUtils processUtils)
         {
             InitializeComponent();
             this.selfDiagnostics = selfDiagnostics;
@@ -34,6 +35,7 @@ namespace IISManagerUI
             timer.Tick += Timer_Tick;
             this.userMessage = userMessage;
             userMessagePanel.DataContext = userMessage;
+            this.processUtils = processUtils;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -43,10 +45,7 @@ namespace IISManagerUI
 
         private void OpenLogsDir_Click(object sender, MouseButtonEventArgs e)
         {
-            Utils.SafeExecute(() =>
-            {
-                ProcessUtils.GoToPath(Configuration.LogsDirPath);
-            });
+            processUtils.GoToPath(Configuration.LogsDirPath);
         }
     }
 }

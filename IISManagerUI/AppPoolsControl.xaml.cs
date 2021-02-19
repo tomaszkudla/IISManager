@@ -26,8 +26,9 @@ namespace IISManagerUI
     {
         private readonly ApplicationPoolsManager manager;
         private readonly RefreshingTimer timer;
+        private readonly ProcessUtils processUtils;
 
-        public AppPoolsControl(ApplicationPoolsManager manager, RefreshingTimer refreshingTimer)
+        public AppPoolsControl(ApplicationPoolsManager manager, RefreshingTimer refreshingTimer, ProcessUtils processUtils)
         {
             InitializeComponent();
             var cpuUsageConverter = Resources["cpuUsageConverter"] as ThresholdConverter;
@@ -51,6 +52,7 @@ namespace IISManagerUI
             this.manager = manager;
             this.timer = refreshingTimer;
             timer.Tick += Timer_Tick;
+            this.processUtils = processUtils;
             applicationPoolsControl.DataContext = manager.ApplicationPools;
         }
 
@@ -85,30 +87,21 @@ namespace IISManagerUI
 
         private void KillProcess_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SafeExecute(() =>
-            {
-                var button = sender as Label;
-                var id = int.Parse(button.Tag.ToString());
-                ProcessUtils.KillProcess(id);
-            });
+            var button = sender as Label;
+            var id = int.Parse(button.Tag.ToString());
+            processUtils.KillProcess(id);
         }
 
         private void GoToPath_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SafeExecute(() =>
-            {
-                var button = sender as Label;
-                ProcessUtils.GoToPath(button.Tag.ToString());
-            });
+            var button = sender as Label;
+            processUtils.GoToPath(button.Tag.ToString());
         }
 
         private void SendGetRequest_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SafeExecute(() =>
-            {
-                var button = sender as Label;
-                ProcessUtils.SendGetRequest(button.Tag.ToString());
-            });
+            var button = sender as Label;
+            processUtils.SendGetRequest(button.Tag.ToString());
         }
     }
 }

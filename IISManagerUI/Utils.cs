@@ -7,17 +7,6 @@ namespace IISManagerUI
     public static class Utils
     {
         static readonly Lazy<double?> totalMemory = new Lazy<double?>(DoGetTotalMemory());
-        public static void SafeExecute(Action action)
-        {
-            try
-            {
-                action();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
 
         public static double? GetTotalMemory()
         {

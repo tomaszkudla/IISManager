@@ -1,4 +1,5 @@
 ﻿using IISManager.Implementations;
+using IISManager.Utils;
 using IISManager.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -42,6 +43,7 @@ namespace IISManagerUI
             services.AddSingleton<ProcessDiagnostics>();
             services.AddSingleton<ApplicationPoolsManager>();
             services.AddSingleton<IISServerManager>();
+            services.AddSingleton<ProcessUtils>();
             services.AddSingleton<RefreshingTimer>();
             services.AddSingleton<AppPoolsControl>();
             services.AddSingleton<TopPanel>();
