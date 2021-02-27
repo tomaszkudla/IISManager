@@ -124,7 +124,7 @@ namespace IISManager.Implementations
                     var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
                     foreach (var appPool in selectedPools)
                     {
-                        if (appPool.State != ObjectState.Started)
+                        if (appPool.State != ObjectState.Started && appPool.State != ObjectState.Starting)
                         {
                             try
                             {
@@ -162,7 +162,7 @@ namespace IISManager.Implementations
                     var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
                     foreach (var appPool in selectedPools)
                     {
-                        if (appPool.State != ObjectState.Stopped)
+                        if (appPool.State != ObjectState.Stopped && appPool.State != ObjectState.Stopping)
                         {
                             try
                             {
@@ -200,7 +200,7 @@ namespace IISManager.Implementations
                     var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
                     foreach (var appPool in selectedPools)
                     {
-                        if (appPool.State != ObjectState.Stopped)
+                        if (appPool.State != ObjectState.Stopped && appPool.State != ObjectState.Stopping && appPool.State != ObjectState.Starting)
                         {
                             try
                             {
