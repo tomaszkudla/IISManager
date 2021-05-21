@@ -1,32 +1,29 @@
 ﻿using IISManager.Utils;
 using IISManager.ViewModels;
+using Microsoft.Extensions.Logging;
 using Microsoft.Web.Administration;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace IISManager.Implementations
 {
     public sealed class ApplicationPoolsManager
     {
-        private static readonly ApplicationPoolsManager instance = new ApplicationPoolsManager();
+        private readonly ILogger<ApplicationPoolsManager> logger;
+        private readonly ProcessDiagnostics processDiagnostics;
+        private readonly IISServerManager iisServerManager;
+        private readonly UserMessage userMessage;
         private readonly ApplicationPoolsList applicationPools = new ApplicationPoolsList();
+        private string lastRefreshExceptionMessage;
 
-        static ApplicationPoolsManager()
+        public ApplicationPoolsManager(ILoggerFactory loggerFactory, ProcessDiagnostics processDiagnostics, IISServerManager iisServerManager, UserMessage userMessage)
         {
-        }
-
-        private ApplicationPoolsManager()
-        {
+            logger = loggerFactory.CreateLogger<ApplicationPoolsManager>();
+            this.processDiagnostics = processDiagnostics;
+            this.iisServerManager = iisServerManager;
+            this.userMessage = userMessage;
             Refresh();
-        }
-
-        public static ApplicationPoolsManager Instance
-        {
-            get
-            {
-                return instance;
-            }
         }
 
         public ApplicationPoolsList ApplicationPools
@@ -41,11 +38,50 @@ namespace IISManager.Implementations
 
         public void Refresh()
         {
-            using (var serverManager = new ServerManager())
+            try
             {
-                WorkerProcessDiagnostics.Instance.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
-                var applications = GetApplications(serverManager.Sites);
-                applicationPools.Value = serverManager.ApplicationPools.Select(p => new ViewModels.ApplicationPool(p, applications.Where(a => a.ApplicationPoolName == p.Name).ToList())).ToList();
+                using (var serverManager = new ServerManager())
+                {
+                    var isIISStopped = iisServerManager.IsIISStopped();
+                    if (isIISStopped)
+                    {
+                        processDiagnostics.Refresh(Enumerable.Empty<int>());
+                    }
+                    else
+                    {
+                        processDiagnostics.Refresh(serverManager.WorkerProcesses.Select(p => p.ProcessId));
+                    }
+
+                    var applications = GetApplications(serverManager.Sites);
+                    applicationPools.Value = serverManager.ApplicationPools.Select(p => new ViewModels.ApplicationPool(p, applications.Where(a => a.ApplicationPoolName == p.Name).ToList(), processDiagnostics)).ToList();
+                    
+                    if (isIISStopped && applicationPools.Value.All(p => p.State == ApplicationPoolState.Stopped))
+                    {
+                        userMessage.SetWarn(UserMessageText.IISIsNotRunning);
+                    }
+                    else if (userMessage.Message == UserMessageText.IISIsNotRunning)
+                    {
+                        userMessage.SetInfo(UserMessageText.IISStarted);
+                    }
+                }
+
+                lastRefreshExceptionMessage = null;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                if (ex.Message.Contains("Cannot read configuration file due to insufficient permissions"))
+                {
+                    userMessage.SetError(UserMessageText.RunAsAdmin);
+                }
+            }
+            catch (Exception ex)
+            {
+                userMessage.SetError(UserMessageText.ErrorDuringRefresh);
+                if (ex.Message != lastRefreshExceptionMessage)
+                {
+                    logger.LogError($"Error during refresh. {ex}");
+                    lastRefreshExceptionMessage = ex.Message;
+                }
             }
         }
 
@@ -73,51 +109,114 @@ namespace IISManager.Implementations
         public void StartSelected()
         {
             var selectedPoolNames = applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name);
-            using (var serverManager = new ServerManager())
+            if (!selectedPoolNames.Any() || iisServerManager.IsIISStopped())
             {
-                var allPools = serverManager.ApplicationPools;
-                var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
-                foreach (var appPool in selectedPools)
+                return;
+            }
+
+            logger.LogTrace($"Start requested for the following application pools:{Environment.NewLine}{string.Join(Environment.NewLine, selectedPoolNames)}".TrimEnd());
+
+            try
+            {
+                using (var serverManager = new ServerManager())
                 {
-                    if (appPool.State != ObjectState.Started)
+                    var allPools = serverManager.ApplicationPools;
+                    var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
+                    foreach (var appPool in selectedPools)
                     {
-                        appPool.Start();
+                        if (appPool.State != ObjectState.Started && appPool.State != ObjectState.Starting)
+                        {
+                            try
+                            {
+                                appPool.Start();
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.LogError($"Failed to start an application pool {appPool.Name} {ex}");
+                            }
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Failed to start selected application pools {ex}");
             }
         }
 
         public void StopSelected()
         {
             var selectedPoolNames = applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name);
-            using (var serverManager = new ServerManager())
+            if (!selectedPoolNames.Any() || iisServerManager.IsIISStopped())
             {
-                var allPools = serverManager.ApplicationPools;
-                var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
-                foreach (var appPool in selectedPools)
+                return;
+            }
+
+            logger.LogTrace($"Stop requested for the following application pools:{Environment.NewLine}{string.Join(Environment.NewLine, selectedPoolNames)}".TrimEnd());
+
+            try
+            {
+                using (var serverManager = new ServerManager())
                 {
-                    if (appPool.State != ObjectState.Stopped)
+                    var allPools = serverManager.ApplicationPools;
+                    var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
+                    foreach (var appPool in selectedPools)
                     {
-                        appPool.Stop();
+                        if (appPool.State != ObjectState.Stopped && appPool.State != ObjectState.Stopping)
+                        {
+                            try
+                            {
+                                appPool.Stop();
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.LogError($"Failed to stop an application pool {appPool.Name} {ex}");
+                            }
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Failed to stop selected application pools {ex}");
             }
         }
 
         public void RecycleSelected()
         {
             var selectedPoolNames = applicationPools.Value.Where(p => p.IsSelected).Select(p => p.Name);
-            using (var serverManager = new ServerManager())
+            if (!selectedPoolNames.Any() || iisServerManager.IsIISStopped())
             {
-                var allPools = serverManager.ApplicationPools;
-                var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
-                foreach (var appPool in selectedPools)
+                return;
+            }
+
+            logger.LogTrace($"Recycle requested for the following application pools:{Environment.NewLine}{string.Join(Environment.NewLine, selectedPoolNames)}".TrimEnd());
+
+            try
+            {
+                using (var serverManager = new ServerManager())
                 {
-                    if (appPool.State != ObjectState.Stopped)
+                    var allPools = serverManager.ApplicationPools;
+                    var selectedPools = selectedPoolNames.Select(n => allPools.FirstOrDefault(p => p.Name == n)).Where(n => n != null);
+                    foreach (var appPool in selectedPools)
                     {
-                        appPool.Recycle();
+                        if (appPool.State != ObjectState.Stopped && appPool.State != ObjectState.Stopping && appPool.State != ObjectState.Starting)
+                        {
+                            try
+                            {
+                                appPool.Recycle();
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.LogError($"Failed to recycle an application pool {appPool.Name} {ex}");
+                            }
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Failed to recycle selected application pools {ex}");
             }
         }
 

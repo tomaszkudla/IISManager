@@ -19,9 +19,9 @@ namespace IISManager.Utils
                 case SortingType.ByStateDsc:
                     return applicationPools.OrderByDescending(p => p.State).ThenBy(p => p.WorkerProcesses.Value.Any()).ThenBy(p => p.Name).ToList();
                 case SortingType.ByCpuUsageAsc:
-                    return applicationPools.OrderBy(p => p.WorkerProcesses.Value.Sum(wp => wp.WorkerProcessDiagnostics.CpuUsage.Value)).ThenByDescending(p => p.State).ThenBy(p => p.WorkerProcesses.Value.Any()).ThenBy(p => p.Name).ToList();
+                    return applicationPools.OrderBy(p => p.WorkerProcesses.Value.Sum(wp => wp.ProcessDiagnosticValues.CpuUsage.Value)).ThenByDescending(p => p.State).ThenBy(p => p.WorkerProcesses.Value.Any()).ThenBy(p => p.Name).ToList();
                 case SortingType.ByCpuUsageDsc:
-                    return applicationPools.OrderByDescending(p => p.WorkerProcesses.Value.Sum(wp => wp.WorkerProcessDiagnostics.CpuUsage.Value)).ThenBy(p => p.State).ThenBy(p => !p.WorkerProcesses.Value.Any()).ThenBy(p => p.Name).ToList();
+                    return applicationPools.OrderByDescending(p => p.WorkerProcesses.Value.Sum(wp => wp.ProcessDiagnosticValues.CpuUsage.Value)).ThenBy(p => p.State).ThenBy(p => !p.WorkerProcesses.Value.Any()).ThenBy(p => p.Name).ToList();
                 default:
                     return applicationPools.ToList();
             }

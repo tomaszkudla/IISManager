@@ -1,28 +1,63 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Extensions.Logging;
+using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace IISManager.Utils
 {
-    public static class ProcessUtils
+    public class ProcessUtils
     {
-        public static void KillProcess(int processId)
+        private readonly ILogger<ProcessUtils> logger;
+        public ProcessUtils(ILoggerFactory loggerFactory)
         {
-            Process.GetProcessById(processId).Kill();
+            logger = loggerFactory.CreateLogger<ProcessUtils>();
         }
 
-        public static void GoToPath(string path)
+        public void KillProcess(int processId)
         {
-            Process.Start(new ProcessStartInfo("explorer", path) { CreateNoWindow = true });
+            logger.LogTrace($"Kill process {processId} requested");
+
+            try
+            {
+                Process.GetProcessById(processId).Kill();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Failed to kill process {ex}");
+            }
         }
 
-        public static void SendGetRequest(string url)
+        public void GoToPath(string path)
         {
+            logger.LogTrace($"Go to path {path} requested");
+
+            try
+            {
+                Process.Start(new ProcessStartInfo("explorer", path) { CreateNoWindow = true });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Failed to open path {path} {ex}");
+            }
+        }
+
+        public void SendGetRequest(string url)
+        {
+            logger.LogTrace($"Send get request {url} requested");
+
             Task.Run(() =>
             {
-                using (var client = new HttpClient())
+                try
                 {
-                    _ = client.GetAsync(url).Result;
+                    using (var client = new HttpClient())
+                    {
+                        _ = client.GetAsync(url).GetAwaiter().GetResult();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError($"Failed to send GET request to {url} {ex}");
                 }
             });
         }

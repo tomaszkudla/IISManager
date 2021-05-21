@@ -12,14 +12,14 @@ namespace IISManager.ViewModels
         private string name;
         private ApplicationPoolState state;
         private bool isSelected;
-        private readonly WorkerProcessDiagnostics cpuUsageCounters;
+        private readonly ProcessDiagnostics processDiagnostics;
 
-        public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool, List<Application> applications)
+        public ApplicationPool(Microsoft.Web.Administration.ApplicationPool applicationPool, List<Application> applications, ProcessDiagnostics processDiagnostics)
         {
             this.applicationPool = applicationPool;
             name = applicationPool.Name;
             state = (ApplicationPoolState)(int)applicationPool.State;
-            cpuUsageCounters = WorkerProcessDiagnostics.Instance;
+            this.processDiagnostics = processDiagnostics;
             WorkerProcesses.Value = GetWorkerProcesses(applicationPool);
             Applications = new ApplicationsList(applications);
         }
@@ -69,35 +69,11 @@ namespace IISManager.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        public void Recycle()
-        {
-            if (applicationPool.State != ObjectState.Stopped)
-            {
-                applicationPool.Recycle();
-            }
-        }
-
-        public void Start()
-        {
-            if (applicationPool.State != ObjectState.Started)
-            {
-                applicationPool.Start();
-            }
-        }
-
-        public void Stop()
-        {
-            if (applicationPool.State != ObjectState.Stopped)
-            {
-                applicationPool.Stop();
-            }
-        }
-
         private List<WorkerProcess> GetWorkerProcesses(Microsoft.Web.Administration.ApplicationPool applicationPool)
         {
             if (applicationPool.State != ObjectState.Stopped)
             {
-                return applicationPool.WorkerProcesses.Select(p => new WorkerProcess(p, cpuUsageCounters.GetWorkerProcessDiagnosticValuesForProcessId(p.ProcessId))).ToList();
+                return applicationPool.WorkerProcesses.Select(p => new WorkerProcess(p, processDiagnostics.GetProcessDiagnosticValuesByProcessId(p.ProcessId))).ToList();
             }
 
             return new List<WorkerProcess>();

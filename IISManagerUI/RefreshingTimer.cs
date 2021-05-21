@@ -5,25 +5,12 @@ namespace IISManagerUI
 {
     public sealed class RefreshingTimer
     {
-        private static readonly RefreshingTimer instance = new RefreshingTimer();
         private readonly DispatcherTimer timer = new DispatcherTimer();
         private bool isPaused;
 
-        static RefreshingTimer()
-        {
-        }
-
-        private RefreshingTimer()
+        public RefreshingTimer()
         {
             SetupTimer();
-        }
-
-        public static RefreshingTimer Instance
-        {
-            get
-            {
-                return instance;
-            }
         }
 
         public void PauseForNextTick()
